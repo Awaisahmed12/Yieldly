@@ -92,9 +92,9 @@ export function SettingsPage() {
   }
 
   async function handleSignOut() {
-    await supabase.auth.signOut()
-    reset()
     navigate('/auth')
+    reset()
+    supabase.auth.signOut({ scope: 'local' })
   }
 
   const ownedCardIds = userCards.map(c => c.id)

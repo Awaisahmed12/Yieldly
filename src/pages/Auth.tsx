@@ -56,7 +56,7 @@ export function AuthPage() {
   }
 
   return (
-    <div className="min-h-dvh bg-bg flex flex-col items-center justify-center px-5 py-12">
+    <div className="min-h-dvh bg-bg flex flex-col items-center justify-center px-5 py-12 max-w-[480px] mx-auto">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <p className="text-accent font-mono text-sm tracking-widest uppercase mb-3">Yield</p>
@@ -84,7 +84,7 @@ export function AuthPage() {
                 placeholder="you@example.com"
                 required
                 autoFocus
-                className="w-full bg-surface border border-border rounded-lg px-4 py-3 text-text-primary placeholder-muted font-mono text-sm focus:outline-none focus:border-accent transition-colors"
+                className="w-full bg-surface border border-border rounded-lg px-4 py-3 text-text-primary placeholder-muted font-mono text-base focus:outline-none focus:border-accent transition-colors"
               />
             </div>
 
