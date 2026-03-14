@@ -56,7 +56,7 @@ export function AuthPage() {
   }
 
   return (
-    <div className="min-h-dvh bg-bg flex flex-col items-center justify-center px-5 py-12 max-w-[480px] mx-auto">
+    <div className="min-h-dvh bg-bg flex flex-col items-center justify-center px-5 py-12 max-w-[480px] mx-auto" style={{ paddingTop: 'calc(3rem + env(safe-area-inset-top))' }}>
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <p className="text-accent font-mono text-sm tracking-widest uppercase mb-3">Yield</p>

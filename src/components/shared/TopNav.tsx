@@ -10,7 +10,10 @@ export function TopNav({ showBack = false, showSettings = false, title }: TopNav
   const navigate = useNavigate()
 
   return (
-    <header className="sticky top-0 z-10 bg-bg border-b border-border flex items-center justify-between px-4 h-14">
+    <header
+      className="sticky top-0 z-10 bg-bg border-b border-border flex items-center justify-between px-4"
+      style={{ paddingTop: 'env(safe-area-inset-top)', minHeight: 'calc(3.5rem + env(safe-area-inset-top))' }}
+    >
       {/* Left */}
       <div className="flex items-center">
         {showBack ? (
