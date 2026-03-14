@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0a0a08;
+  --surface: #111110;
+  --border: #2a2a26;
+  --accent: #c8f542;
+  --accent2: #f5a623;
+  --text-primary: #e8e8e0;
+  --muted: #6b6b60;
+}
+
+html, body {
+  @apply bg-bg text-text-primary;
+  min-height: 100dvh;
+}
+
+* {
+  box-sizing: border-box;
+}

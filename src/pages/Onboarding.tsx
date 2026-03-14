@@ -1,0 +1,94 @@
+import { useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
+import { useUserStore } from '../store/userStore'
+import { useRewardData } from '../hooks/useRewardData'
+import { OnboardingShell } from '../components/onboarding/OnboardingShell'
+import { LoadingSpinner } from '../components/shared/LoadingSpinner'
+import type { UserPreferencesRow } from '../types/supabase'
+
+export function OnboardingPage() {
+  const navigate = useNavigate()
+  const { user, setPrefs, setUserCards } = useUserStore()
+  const { banks, cards, loading } = useRewardData()
+
+  async function handleSkip() {
+    if (!user) return
+
+    const { data } = await supabase
+      .from('user_preferences')
+      .upsert({ user_id: user.id, onboarding_complete: true, cpp_mode: 'default' as const })
+      .select()
+      .single()
+
+    if (data) setPrefs(data as UserPreferencesRow)
+    navigate('/')
+  }
+
+  async function handleComplete(selectedCardIds: string[]) {
+    if (!user) return
+
+    try {
+      // Delete existing user_cards rows for this user
+      await supabase
+        .from('user_cards')
+        .delete()
+        .eq('user_id', user.id)
+
+      // Insert new user_cards rows
+      if (selectedCardIds.length > 0) {
+        await supabase
+          .from('user_cards')
+          .insert(selectedCardIds.map(cardId => ({ user_id: user.id, card_id: cardId })))
+      }
+
+      // Upsert user_preferences with onboarding_complete
+      const { data: prefsData } = await supabase
+        .from('user_preferences')
+        .upsert({
+          user_id: user.id,
+          onboarding_complete: true,
+          cpp_mode: 'default' as const,
+        })
+        .select()
+        .single()
+
+      if (prefsData) setPrefs(prefsData as UserPreferencesRow)
+
+      // Update user cards in store
+      const selectedCards = cards.filter(c => selectedCardIds.includes(c.id))
+      setUserCards(selectedCards)
+
+      navigate('/')
+    } catch (err) {
+      console.error('Error completing onboarding:', err)
+    }
+  }
+
+  return (
+    <div className="min-h-dvh bg-bg">
+      {/* Skip link */}
+      <div className="absolute top-4 right-4 z-10">
+        <button
+          type="button"
+          onClick={handleSkip}
+          className="font-mono text-xs text-muted hover:text-text-primary transition-colors"
+        >
+          Skip for now
+        </button>
+      </div>
+
+      {loading ? (
+        <div className="min-h-dvh flex flex-col items-center justify-center gap-4">
+          <LoadingSpinner size="md" />
+          <p className="font-mono text-sm text-muted">Loading cards...</p>
+        </div>
+      ) : (
+        <OnboardingShell
+          banks={banks}
+          cards={cards}
+          onComplete={handleComplete}
+        />
+      )}
+    </div>
+  )
+}
