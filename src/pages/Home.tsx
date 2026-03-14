@@ -33,17 +33,17 @@ export function HomePage() {
   const winnerBank = winner ? banks.find(b => b.id === winner.card.bank_id) ?? null : null
 
   const openResult = useCallback((slug: string) => {
-    // Reset animation state so it re-triggers on each new selection
     setResultVisible(false)
     setSelectedSlug(slug)
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setResultVisible(true)
-        // Scroll the result label into view so the winner is just below the fold
-        setTimeout(() => {
-          resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }, 80)
-      })
+      setResultVisible(true)
+      // Scroll so the label + top of the winner card peek into view — user scrolls for the rest
+      setTimeout(() => {
+        if (resultRef.current) {
+          const top = resultRef.current.getBoundingClientRect().top + window.scrollY
+          window.scrollTo({ top: top - window.innerHeight * 0.55, behavior: 'smooth' })
+        }
+      }, 50)
     })
   }, [])
 
@@ -87,11 +87,8 @@ export function HomePage() {
       {selectedSlug && (
         <div
           ref={resultRef}
-          className="transition-all duration-300 ease-out"
-          style={{
-            opacity: resultVisible ? 1 : 0,
-            transform: resultVisible ? 'translateY(0)' : 'translateY(16px)',
-          }}
+          className="transition-opacity duration-200"
+          style={{ opacity: resultVisible ? 1 : 0 }}
         >
           {/* Section label */}
           <div className="px-4 pt-8 pb-3">

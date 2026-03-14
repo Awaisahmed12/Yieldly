@@ -1,4 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#0a0a08"/>
-  <text x="256" y="340" font-family="Georgia, serif" font-size="300" font-weight="700" fill="#c8f542" text-anchor="middle">Y</text>
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="#0a0a08"/>
+  <!-- Y lettermark — two diagonal arms meeting at center, then stem down -->
+  <path d="M148 120 L256 272 L364 120" stroke="#c8f542" stroke-width="52" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M256 272 L256 392" stroke="#c8f542" stroke-width="52" stroke-linecap="round" fill="none"/>
 </svg>
