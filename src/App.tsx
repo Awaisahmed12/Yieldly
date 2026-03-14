@@ -4,7 +4,6 @@ import { useUserStore } from './store/userStore'
 import { AuthPage } from './pages/Auth'
 import { OnboardingPage } from './pages/Onboarding'
 import { HomePage } from './pages/Home'
-import { ResultPage } from './pages/Result'
 import { SettingsPage } from './pages/Settings'
 
 interface ProtectedRouteProps {
@@ -86,14 +85,6 @@ function AppRoutes() {
         element={
           <ProtectedRoute requireOnboarding>
             <HomePage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/result/:slug"
-        element={
-          <ProtectedRoute requireOnboarding>
-            <ResultPage />
           </ProtectedRoute>
         }
       />

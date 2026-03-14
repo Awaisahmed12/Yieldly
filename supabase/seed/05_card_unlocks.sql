@@ -22,6 +22,11 @@ INSERT INTO card_unlocks (card_id, category_slug)
 SELECT c.id, 'costco'      FROM card_ids c WHERE c.slug = 'citi_costco'
 ON CONFLICT DO NOTHING;
 
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'sams_club'   FROM card_ids c WHERE c.slug = 'synchrony_sams_club'
+ON CONFLICT DO NOTHING;
+
 -- United cards
 WITH card_ids AS (SELECT slug, id FROM cards)
 INSERT INTO card_unlocks (card_id, category_slug)

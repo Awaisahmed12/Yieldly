@@ -9,10 +9,12 @@ interface BankSectionProps {
   cards: CardRow[]
   selectedCardIds: string[]
   onToggle: (cardId: string) => void
+  forceExpanded?: boolean
 }
 
-export function BankSection({ bank, cards, selectedCardIds, onToggle }: BankSectionProps) {
-  const [isExpanded, setIsExpanded] = useState(true)
+export function BankSection({ bank, cards, selectedCardIds, onToggle, forceExpanded }: BankSectionProps) {
+  const [isExpanded, setIsExpanded] = useState(false)
+  const expanded = forceExpanded ?? isExpanded
 
   const selectedCount = cards.filter(c => selectedCardIds.includes(c.id)).length
 
@@ -48,14 +50,14 @@ export function BankSection({ bank, cards, selectedCardIds, onToggle }: BankSect
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className={`text-muted transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+          className={`text-muted transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
         >
           <path d="m6 9 6 6 6-6" />
         </svg>
       </button>
 
       {/* Card list */}
-      {isExpanded && (
+      {expanded && (
         <div className="border-t border-border/50">
           {cards.map(card => (
             <CardToggle

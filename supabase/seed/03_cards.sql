@@ -258,6 +258,12 @@ SELECT b.id, 'capital_one_spark_cash', 'Spark Cash Plus', 'Capital One Spark Cas
 FROM bank_ids b WHERE b.slug = 'capital_one'
 ON CONFLICT (slug) DO NOTHING;
 
+WITH bank_ids AS (SELECT slug, id FROM banks)
+INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
+SELECT b.id, 'capital_one_venture_one', 'VentureOne', 'Capital One VentureOne Rewards Credit Card', false, 'C1', 1.00, 1.50, 1.85, 0.00
+FROM bank_ids b WHERE b.slug = 'capital_one'
+ON CONFLICT (slug) DO NOTHING;
+
 -- ── DISCOVER ───────────────────────────────────────────────────────────────
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
@@ -373,6 +379,12 @@ ON CONFLICT (slug) DO NOTHING;
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
 SELECT b.id, 'paypal_cashback', 'PayPal Cashback', 'PayPal Cashback Mastercard®', false, 'CB', 1.00, 1.00, 1.00, 0.00
+FROM bank_ids b WHERE b.slug = 'synchrony'
+ON CONFLICT (slug) DO NOTHING;
+
+WITH bank_ids AS (SELECT slug, id FROM banks)
+INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
+SELECT b.id, 'synchrony_sams_club', 'Sam''s Club Mastercard', 'Sam''s Club® Mastercard®', false, 'CB', 1.00, 1.00, 1.00, 0.00
 FROM bank_ids b WHERE b.slug = 'synchrony'
 ON CONFLICT (slug) DO NOTHING;
 

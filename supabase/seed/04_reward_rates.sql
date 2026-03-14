@@ -1003,6 +1003,27 @@ SELECT c.id, 'other', 2.00, 'multiplier', NULL, NULL, 'On all other purchases'
 FROM card_ids c WHERE c.slug = 'capital_one_venture'
 ON CONFLICT (card_id, category_slug) DO NOTHING;
 
+-- ── CAPITAL ONE VENTUREONE ────────────────────────────────────────────────
+-- 5x travel portal (hotels/rental cars), 1.25x everything else
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'travel', 5.00, 'multiplier', NULL, NULL, 'Via Capital One Travel portal'
+FROM card_ids c WHERE c.slug = 'capital_one_venture_one'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 5.00, 'multiplier', NULL, NULL, 'Via Capital One Travel portal'
+FROM card_ids c WHERE c.slug = 'capital_one_venture_one'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'other', 1.25, 'multiplier', NULL, NULL, 'On all other purchases'
+FROM card_ids c WHERE c.slug = 'capital_one_venture_one'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
 -- ── CAPITAL ONE QUICKSILVER ───────────────────────────────────────────────
 -- 1.5% flat on everything
 
@@ -1394,6 +1415,27 @@ WITH card_ids AS (SELECT slug, id FROM cards)
 INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
 SELECT c.id, 'other', 2.00, 'cashback', NULL, NULL, 'Flat 2% on all purchases'
 FROM card_ids c WHERE c.slug = 'paypal_cashback'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── SAM'S CLUB MASTERCARD ─────────────────────────────────────────────────
+-- 5% Sam's Club (Plus members), 5% gas (cap $6k/yr), 3% dining
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'sams_club', 5.00, 'cashback', NULL, NULL, 'Sam''s Club and Sams.com (Plus members)'
+FROM card_ids c WHERE c.slug = 'synchrony_sams_club'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'gas', 5.00, 'cashback', 6000.00, 'annual', 'At any gas station; then 1%'
+FROM card_ids c WHERE c.slug = 'synchrony_sams_club'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 3.00, 'cashback', NULL, NULL, 'Dining and takeout'
+FROM card_ids c WHERE c.slug = 'synchrony_sams_club'
 ON CONFLICT (card_id, category_slug) DO NOTHING;
 
 -- ── EBAY MASTERCARD ───────────────────────────────────────────────────────

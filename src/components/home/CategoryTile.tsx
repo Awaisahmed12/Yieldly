@@ -38,9 +38,10 @@ const ICON_MAP: Record<string, string> = {
 interface CategoryTileProps {
   category: CategoryRow
   onClick: (slug: string) => void
+  isSelected?: boolean
 }
 
-export function CategoryTile({ category, onClick }: CategoryTileProps) {
+export function CategoryTile({ category, onClick, isSelected = false }: CategoryTileProps) {
   const icon = ICON_MAP[category.icon_name] ?? ICON_MAP[category.slug] ?? '💳'
 
   return (
@@ -48,22 +49,23 @@ export function CategoryTile({ category, onClick }: CategoryTileProps) {
       type="button"
       onClick={() => onClick(category.slug)}
       className={`
-        aspect-square flex flex-col items-center justify-center gap-2 rounded-xl bg-surface
-        border transition-all duration-150
-        active:scale-95
-        ${category.is_brand
-          ? 'border-accent/20 hover:border-accent/50 hover:shadow-[0_0_12px_rgba(200,245,66,0.12)]'
-          : 'border-border hover:border-accent/40 hover:shadow-[0_0_12px_rgba(200,245,66,0.1)]'
+        aspect-square flex flex-col items-center justify-center gap-2 rounded-xl
+        border transition-all duration-150 active:scale-95
+        ${isSelected
+          ? 'bg-accent/10 border-accent text-accent shadow-[0_0_16px_rgba(200,245,66,0.18)]'
+          : category.is_brand
+            ? 'bg-surface border-accent/20 hover:border-accent/50 hover:bg-accent/5'
+            : 'bg-surface border-border hover:border-accent/40 hover:bg-accent/5'
         }
       `}
     >
       <span className="text-2xl leading-none" role="img" aria-hidden="true">
         {icon}
       </span>
-      <span className="font-mono text-xs text-text-primary text-center leading-snug px-1 line-clamp-2">
+      <span className={`font-mono text-xs text-center leading-snug px-1 line-clamp-2 ${isSelected ? 'text-accent' : 'text-text-primary'}`}>
         {category.display_name}
       </span>
-      {category.is_brand && (
+      {category.is_brand && !isSelected && (
         <div className="w-1 h-1 rounded-full bg-accent/60" />
       )}
     </button>

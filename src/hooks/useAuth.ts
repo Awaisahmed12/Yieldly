@@ -12,11 +12,14 @@ export function useAuth() {
 
     async function loadUserData(userId: string) {
       try {
-        // Fetch user's cards via join
-        const { data: userCardRows } = await supabase
+        console.log('[useAuth] fetching user_cards…')
+        const { data: userCardRows, error: cardsError } = await supabase
           .from('user_cards')
           .select('card_id, cards(*)')
           .eq('user_id', userId)
+
+        if (cardsError) console.error('[useAuth] user_cards error:', cardsError)
+        else console.log('[useAuth] user_cards rows:', userCardRows?.length ?? 0)
 
         if (mounted && userCardRows) {
           const cards = userCardRows
@@ -25,19 +28,22 @@ export function useAuth() {
           setUserCards(cards)
         }
 
-        // Fetch or create user preferences
-        const { data: existingPrefs } = await supabase
+        console.log('[useAuth] fetching user_preferences…')
+        const { data: existingPrefs, error: prefsError } = await supabase
           .from('user_preferences')
           .select('*')
           .eq('user_id', userId)
           .single()
 
+        if (prefsError) console.error('[useAuth] user_preferences error:', prefsError)
+        else console.log('[useAuth] prefs:', existingPrefs)
+
         if (mounted) {
           if (existingPrefs) {
             setPrefs(existingPrefs as UserPreferencesRow)
           } else {
-            // Create default preferences
-            const { data: newPrefs } = await supabase
+            console.log('[useAuth] creating default prefs…')
+            const { data: newPrefs, error: insertError } = await supabase
               .from('user_preferences')
               .insert({
                 user_id: userId,
@@ -46,26 +52,35 @@ export function useAuth() {
               })
               .select()
               .single()
+            if (insertError) console.error('[useAuth] insert prefs error:', insertError)
             if (newPrefs) setPrefs(newPrefs as UserPreferencesRow)
           }
         }
-      } catch {
-        // Silently handle errors — store stays empty
+      } catch (err) {
+        console.error('[useAuth] loadUserData threw:', err)
       }
     }
 
     // Get initial session
+    console.log('[useAuth] calling getSession…')
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('[useAuth] getSession resolved, user:', session?.user?.id ?? 'none')
       if (!mounted) return
       setSession(session)
       setUser(session?.user ?? null)
       if (session?.user) {
+        console.log('[useAuth] loading user data…')
         loadUserData(session.user.id).finally(() => {
+          console.log('[useAuth] loadUserData done, clearing loading')
           if (mounted) setLoading(false)
         })
       } else {
+        console.log('[useAuth] no session, clearing loading')
         setLoading(false)
       }
+    }).catch((err) => {
+      console.error('[useAuth] getSession failed:', err)
+      if (mounted) setLoading(false)
     })
 
     // Subscribe to auth state changes
@@ -81,8 +96,8 @@ export function useAuth() {
           if (mounted) setLoading(false)
         })
       } else {
-        setLoading(false)
         useUserStore.getState().reset()
+        setLoading(false)
       }
     })
 

@@ -5,6 +5,7 @@ interface CategoryGridProps {
   categories: CategoryRow[]
   onSelect: (slug: string) => void
   loading?: boolean
+  selectedSlug?: string | null
 }
 
 function SkeletonTile() {
@@ -13,7 +14,7 @@ function SkeletonTile() {
   )
 }
 
-export function CategoryGrid({ categories, onSelect, loading = false }: CategoryGridProps) {
+export function CategoryGrid({ categories, onSelect, loading = false, selectedSlug }: CategoryGridProps) {
   if (loading) {
     return (
       <div className="grid grid-cols-3 gap-3 px-4">
@@ -40,6 +41,7 @@ export function CategoryGrid({ categories, onSelect, loading = false }: Category
           key={category.slug}
           category={category}
           onClick={onSelect}
+          isSelected={category.slug === selectedSlug}
         />
       ))}
     </div>

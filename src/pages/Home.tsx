@@ -1,13 +1,17 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useRef, useCallback } from 'react'
 import { useCategories } from '../hooks/useCategories'
 import { useRewardData } from '../hooks/useRewardData'
+import { useRewardLookup } from '../hooks/useRewardLookup'
 import { useUserStore } from '../store/userStore'
 import { getSubpromptOptions } from '../lib/categories'
 import { TopNav } from '../components/shared/TopNav'
 import { CategoryGrid } from '../components/home/CategoryGrid'
 import { SubpromptSheet } from '../components/home/SubpromptSheet'
 import { InstallBanner } from '../components/shared/InstallBanner'
+import { ResultCard } from '../components/result/ResultCard'
+import { RankedList } from '../components/result/RankedList'
+import { TiebreakerNote } from '../components/result/TiebreakerNote'
+import { LoadingSpinner } from '../components/shared/LoadingSpinner'
 import type { SubpromptOption } from '../types/reward'
 
 interface SubpromptState {
@@ -16,47 +20,106 @@ interface SubpromptState {
 }
 
 export function HomePage() {
-  const navigate = useNavigate()
   const { categories, loading } = useCategories()
-  const { unlocks, categories: allCategories } = useRewardData()
+  const { unlocks, categories: allCategories, banks } = useRewardData()
   const { userCardIds } = useUserStore()
   const [subprompt, setSubprompt] = useState<SubpromptState | null>(null)
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
+  const [resultVisible, setResultVisible] = useState(false)
+  const resultRef = useRef<HTMLDivElement>(null)
+
+  const { ranked, winner, tie, loading: resultLoading } = useRewardLookup(selectedSlug)
+  const categoryName = allCategories.find(c => c.slug === selectedSlug)?.display_name ?? ''
+  const winnerBank = winner ? banks.find(b => b.id === winner.card.bank_id) ?? null : null
+
+  const openResult = useCallback((slug: string) => {
+    // Reset animation state so it re-triggers on each new selection
+    setResultVisible(false)
+    setSelectedSlug(slug)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setResultVisible(true)
+        // Scroll the result label into view so the winner is just below the fold
+        setTimeout(() => {
+          resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }, 80)
+      })
+    })
+  }, [])
 
   function handleCategoryTap(slug: string) {
-    const category = categories.find(c => c.slug === slug)
-    const label = category?.display_name ?? slug
-
     const options = getSubpromptOptions(slug, userCardIds, unlocks, allCategories)
     if (options && options.length >= 2) {
+      const label = categories.find(c => c.slug === slug)?.display_name ?? slug
       setSubprompt({ options, parentLabel: label })
     } else {
-      navigate(`/result/${slug}`)
+      openResult(slug)
     }
   }
 
   function handleSubpromptSelect(slug: string) {
-    navigate(`/result/${slug}`)
+    setSubprompt(null)
+    openResult(slug)
   }
 
   return (
-    <div className="min-h-dvh bg-bg flex flex-col max-w-[480px] mx-auto">
+    <div className="bg-bg max-w-[480px] mx-auto min-h-dvh pb-24">
       <TopNav showSettings title="Yield" />
 
-      {/* Eyebrow */}
-      <div className="px-4 pt-5 pb-4 flex-shrink-0">
+      {/* Header */}
+      <div className="px-4 pt-5 pb-4">
+        <p className="font-mono text-[10px] text-muted uppercase tracking-[0.2em] mb-1">
+        </p>
         <h1 className="font-serif text-2xl font-semibold text-text-primary leading-snug">
-          Where are you spending?
+          Select a Category
         </h1>
       </div>
 
       {/* Category grid */}
-      <div className="flex-1 pb-20">
-        <CategoryGrid
-          categories={categories}
-          onSelect={handleCategoryTap}
-          loading={loading}
-        />
-      </div>
+      <CategoryGrid
+        categories={categories}
+        onSelect={handleCategoryTap}
+        loading={loading}
+        selectedSlug={selectedSlug}
+      />
+
+      {/* Inline result — slides in below grid, no overlay */}
+      {selectedSlug && (
+        <div
+          ref={resultRef}
+          className="transition-all duration-300 ease-out"
+          style={{
+            opacity: resultVisible ? 1 : 0,
+            transform: resultVisible ? 'translateY(0)' : 'translateY(16px)',
+          }}
+        >
+          {/* Section label */}
+          <div className="px-4 pt-8 pb-3">
+            <p className="font-mono text-[10px] text-muted uppercase tracking-[0.2em]">
+              Best card for {categoryName} →
+            </p>
+          </div>
+
+          {resultLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <LoadingSpinner size="md" />
+            </div>
+          ) : winner ? (
+            <>
+              <ResultCard result={winner} bank={winnerBank} />
+              {tie && <TiebreakerNote tie={tie} />}
+              <RankedList results={ranked} />
+            </>
+          ) : (
+            <div className="px-4 py-10 text-center">
+              <p className="font-serif text-lg text-text-primary">No results</p>
+              <p className="font-mono text-xs text-muted mt-1">
+                None of your cards earn elevated rewards here.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Subprompt sheet */}
       <SubpromptSheet
@@ -67,7 +130,6 @@ export function HomePage() {
         onSelect={handleSubpromptSelect}
       />
 
-      {/* Install banner */}
       <InstallBanner />
     </div>
   )

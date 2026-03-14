@@ -16,7 +16,7 @@ export function RankedListItem({ result, isWinner }: RankedListItemProps) {
       {/* Rank */}
       <div className="w-6 flex-shrink-0 flex items-center justify-center pt-0.5">
         {isWinner ? (
-          <span className="text-base leading-none" role="img" aria-label="Winner">👑</span>
+          <div className="w-2 h-2 rounded-full bg-accent" />
         ) : (
           <span className="font-mono text-xs text-muted">{result.rank}</span>
         )}
@@ -30,7 +30,7 @@ export function RankedListItem({ result, isWinner }: RankedListItemProps) {
           </span>
           {result.hasCap && (
             <span className="font-mono text-xs text-accent2 border border-accent2/30 rounded px-1 py-0.5 flex-shrink-0">
-              ⚠ cap
+              cap
             </span>
           )}
         </div>
