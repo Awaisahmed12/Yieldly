@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useUserStore } from '../store/userStore'
@@ -8,6 +9,8 @@ import type { UserPreferencesRow } from '../types/supabase'
 
 export function OnboardingPage() {
   const navigate = useNavigate()
+  useEffect(() => { window.scrollTo(0, 0) }, [])
+
   const { user, setPrefs, setUserCards } = useUserStore()
   const { banks, cards, loading } = useRewardData()
 
