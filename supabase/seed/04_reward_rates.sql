@@ -921,7 +921,7 @@ ON CONFLICT (card_id, category_slug) DO NOTHING;
 
 WITH card_ids AS (SELECT slug, id FROM cards)
 INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
-SELECT c.id, 'gas', 4.00, 'cashback', 7000.00, 'annual', 'All gas stations including Costco; then 1%'
+SELECT c.id, 'gas', 4.00, 'cashback', 7000.00, 'annual', '4% on first $7,000 in gas per calendar year, 1% after'
 FROM card_ids c WHERE c.slug = 'citi_costco'
 ON CONFLICT (card_id, category_slug) DO NOTHING;
 
