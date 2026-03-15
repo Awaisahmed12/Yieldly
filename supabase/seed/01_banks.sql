@@ -14,5 +14,9 @@ INSERT INTO banks (slug, display_name, brand_color, sort_order) VALUES
   ('usbank',       'US Bank',         '#003087', 10),
   ('robinhood',    'Robinhood',       '#00C805', 11),
   ('cash_app',     'Cash App',        '#00D632', 12),
-  ('synchrony',    'Synchrony',       '#0071CE', 13)
+  ('synchrony',    'Synchrony',       '#0071CE', 13),
+  ('barclays',     'Barclays',        '#00AEEF', 14),
+  ('costco',       'Costco',          '#005DAA', 15),
+  ('sams_club',    'Sam''s Club',      '#0067A0', 16),
+  ('bilt',         'Bilt',            '#D84848', 17)
 ON CONFLICT (slug) DO NOTHING;

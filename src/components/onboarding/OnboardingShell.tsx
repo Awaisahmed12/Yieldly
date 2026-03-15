@@ -6,7 +6,11 @@ import type { BankRow } from '../../types/reward'
 // Co-branded cards that should appear under a brand bank IN ADDITION to their issuer.
 // Key = card slug, value = brand bank slug to also show it under.
 const CO_BRANDED_DISPLAY: Record<string, string> = {
-  'chase_amazon_prime_visa': 'amazon',
+  'chase_amazon_prime_visa':           'amazon',
+  'citi_costco':                       'costco',
+  'synchrony_sams_club':               'sams_club',
+  'barclays_jetblue_plus':             'jetblue',
+  'barclays_jetblue':                  'jetblue',
 }
 
 interface OnboardingShellProps {

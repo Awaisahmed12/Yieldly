@@ -17,6 +17,7 @@ INSERT INTO categories (slug, display_name, icon_name, is_brand, parent_slug, so
   ('online_shopping', 'Online Shopping', 'ShoppingBag',        false, NULL, 11),
   ('rent',            'Rent',            'Home',               false, NULL, 12),
   ('wholesale_clubs', 'Wholesale Clubs', 'Warehouse',          false, NULL, 13),
+  ('car_rental',      'Car Rental',      'Car',                false, NULL, 14),
   ('other',           'Other',           'Tag',                false, NULL, 99)
 ON CONFLICT (slug) DO NOTHING;
 
@@ -26,7 +27,7 @@ INSERT INTO categories (slug, display_name, icon_name, is_brand, parent_slug, so
   ('amazon',      'Amazon',        'Package',          true, 'online_shopping',  20),
   ('whole_foods', 'Whole Foods',   'Leaf',             true, 'groceries',        21),
   ('costco',      'Costco',        'Warehouse',        true, 'wholesale_clubs',  22),
-  ('sams_club',   "Sam's Club",    'Warehouse',        true, 'wholesale_clubs',  23),
+  ('sams_club',   'Sam''s Club',   'Warehouse',        true, 'wholesale_clubs',  23),
   ('united',      'United',        'PlaneTakeoff',     true, 'flights',          23),
   ('delta',       'Delta',         'PlaneTakeoff',     true, 'flights',          24),
   ('southwest',   'Southwest',     'PlaneTakeoff',     true, 'flights',          25),

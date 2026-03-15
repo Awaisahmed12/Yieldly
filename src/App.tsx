@@ -5,6 +5,7 @@ import { AuthPage } from './pages/Auth'
 import { OnboardingPage } from './pages/Onboarding'
 import { HomePage } from './pages/Home'
 import { SettingsPage } from './pages/Settings'
+import { AdminPage } from './pages/Admin'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
@@ -96,6 +97,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route path="/admin" element={<AdminPage />} />
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

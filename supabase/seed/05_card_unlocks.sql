@@ -119,3 +119,69 @@ WITH card_ids AS (SELECT slug, id FROM cards)
 INSERT INTO card_unlocks (card_id, category_slug)
 SELECT c.id, 'amazon'      FROM card_ids c WHERE c.slug = 'discover_it_cash'
 ON CONFLICT DO NOTHING;
+
+-- JetBlue cards
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'jetblue'     FROM card_ids c WHERE c.slug = 'barclays_jetblue_plus'
+ON CONFLICT DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'jetblue'     FROM card_ids c WHERE c.slug = 'barclays_jetblue'
+ON CONFLICT DO NOTHING;
+
+-- United cards (additional)
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'united'      FROM card_ids c WHERE c.slug = 'chase_united_quest'
+ON CONFLICT DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'united'      FROM card_ids c WHERE c.slug = 'chase_united_gateway'
+ON CONFLICT DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'united'      FROM card_ids c WHERE c.slug = 'chase_united_business'
+ON CONFLICT DO NOTHING;
+
+-- IHG cards
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'ihg'         FROM card_ids c WHERE c.slug = 'chase_ihg_one_rewards_premier'
+ON CONFLICT DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'ihg'         FROM card_ids c WHERE c.slug = 'chase_ihg_one_rewards_traveler'
+ON CONFLICT DO NOTHING;
+
+-- Marriott (additional)
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'marriott'    FROM card_ids c WHERE c.slug = 'chase_marriott_bold'
+ON CONFLICT DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'marriott'    FROM card_ids c WHERE c.slug = 'amex_marriott_bonvoy_business'
+ON CONFLICT DO NOTHING;
+
+-- Hilton (additional)
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'hilton'      FROM card_ids c WHERE c.slug = 'amex_hilton_honors_business'
+ON CONFLICT DO NOTHING;
+
+-- Delta (additional)
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'delta'       FROM card_ids c WHERE c.slug = 'amex_delta_gold_business'
+ON CONFLICT DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'delta'       FROM card_ids c WHERE c.slug = 'amex_delta_platinum_business'
+ON CONFLICT DO NOTHING;

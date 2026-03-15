@@ -921,7 +921,7 @@ ON CONFLICT (card_id, category_slug) DO NOTHING;
 
 WITH card_ids AS (SELECT slug, id FROM cards)
 INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
-SELECT c.id, 'gas', 4.00, 'cashback', 7000.00, 'annual', 'Outside Costco; 1% at Costco gas'
+SELECT c.id, 'gas', 4.00, 'cashback', 7000.00, 'annual', 'All gas stations including Costco; then 1%'
 FROM card_ids c WHERE c.slug = 'citi_costco'
 ON CONFLICT (card_id, category_slug) DO NOTHING;
 
@@ -1451,4 +1451,708 @@ WITH card_ids AS (SELECT slug, id FROM cards)
 INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
 SELECT c.id, 'other', 1.50, 'cashback', NULL, NULL, 'On all other purchases'
 FROM card_ids c WHERE c.slug = 'ebay_mastercard'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CAR RENTAL RATES ──────────────────────────────────────────────────────
+-- Capital One Venture X: 10x miles on car rentals via Capital One Travel
+-- Capital One Venture: 5x miles on car rentals via Capital One Travel
+-- Capital One VentureOne: 5x miles on car rentals via Capital One Travel
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'car_rental', 10.00, 'multiplier', NULL, NULL, 'Via Capital One Travel portal'
+FROM card_ids c WHERE c.slug = 'capital_one_venture_x'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'car_rental', 5.00, 'multiplier', NULL, NULL, 'Via Capital One Travel portal'
+FROM card_ids c WHERE c.slug = 'capital_one_venture'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'car_rental', 5.00, 'multiplier', NULL, NULL, 'Via Capital One Travel portal'
+FROM card_ids c WHERE c.slug = 'capital_one_venture_one'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'car_rental', 3.00, 'multiplier', NULL, NULL, 'Via Chase Travel portal'
+FROM card_ids c WHERE c.slug = 'chase_sapphire_reserve'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'car_rental', 2.00, 'multiplier', NULL, NULL, 'Via Chase Travel portal'
+FROM card_ids c WHERE c.slug = 'chase_sapphire_preferred'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── BARCLAYS JETBLUE PLUS ─────────────────────────────────────────────────
+-- 6x JetBlue flights, 2x dining and groceries, 1x elsewhere
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'jetblue', 6.00, 'multiplier', NULL, NULL, 'Purchases with JetBlue'
+FROM card_ids c WHERE c.slug = 'barclays_jetblue_plus'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 6.00, 'multiplier', NULL, NULL, 'Directly with JetBlue'
+FROM card_ids c WHERE c.slug = 'barclays_jetblue_plus'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'barclays_jetblue_plus'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'groceries', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'barclays_jetblue_plus'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── BARCLAYS JETBLUE CARD ─────────────────────────────────────────────────
+-- 3x JetBlue flights, 2x dining and groceries, 1x elsewhere
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'jetblue', 3.00, 'multiplier', NULL, NULL, 'Purchases with JetBlue'
+FROM card_ids c WHERE c.slug = 'barclays_jetblue'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 3.00, 'multiplier', NULL, NULL, 'Directly with JetBlue'
+FROM card_ids c WHERE c.slug = 'barclays_jetblue'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'barclays_jetblue'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'groceries', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'barclays_jetblue'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── BARCLAYS AADVANTAGE AVIATOR RED ───────────────────────────────────────
+-- 2x American Airlines purchases, 1x elsewhere
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 2.00, 'multiplier', NULL, NULL, 'Directly with American Airlines'
+FROM card_ids c WHERE c.slug = 'barclays_aadvantage_aviator_red'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── BARCLAYS WYNDHAM REWARDS EARNER PLUS ──────────────────────────────────
+-- 6x Wyndham hotels, 4x gas, 2x dining, 1x everywhere
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 6.00, 'multiplier', NULL, NULL, 'At Wyndham hotels'
+FROM card_ids c WHERE c.slug = 'barclays_wyndham_rewards_earner_plus'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'gas', 4.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'barclays_wyndham_rewards_earner_plus'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'barclays_wyndham_rewards_earner_plus'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CHASE INK BUSINESS PREFERRED ──────────────────────────────────────────
+-- 3x travel, dining, shipping, advertising, phone (combined $150k cap), 5x travel portal
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'travel', 5.00, 'multiplier', NULL, NULL, 'Via Chase Travel portal'
+FROM card_ids c WHERE c.slug = 'chase_ink_business_preferred'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 3.00, 'multiplier', 150000.00, 'annual', 'Direct bookings; $150k combined cap across bonus categories'
+FROM card_ids c WHERE c.slug = 'chase_ink_business_preferred'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 3.00, 'multiplier', 150000.00, 'annual', 'Direct bookings; $150k combined cap across bonus categories'
+FROM card_ids c WHERE c.slug = 'chase_ink_business_preferred'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 3.00, 'multiplier', 150000.00, 'annual', '$150k combined cap across bonus categories'
+FROM card_ids c WHERE c.slug = 'chase_ink_business_preferred'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CHASE UNITED QUEST ────────────────────────────────────────────────────
+-- 3x United, 2x dining/hotels, 1x elsewhere
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'united', 3.00, 'multiplier', NULL, NULL, 'United flights and purchases'
+FROM card_ids c WHERE c.slug = 'chase_united_quest'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 3.00, 'multiplier', NULL, NULL, 'Directly with United'
+FROM card_ids c WHERE c.slug = 'chase_united_quest'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_united_quest'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_united_quest'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CHASE UNITED GATEWAY ──────────────────────────────────────────────────
+-- 2x United, 2x gas stations, 2x local transit
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'united', 2.00, 'multiplier', NULL, NULL, 'United flights and purchases'
+FROM card_ids c WHERE c.slug = 'chase_united_gateway'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 2.00, 'multiplier', NULL, NULL, 'Directly with United'
+FROM card_ids c WHERE c.slug = 'chase_united_gateway'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'gas', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_united_gateway'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'transit', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_united_gateway'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CHASE UNITED BUSINESS ─────────────────────────────────────────────────
+-- 2x United, 2x dining/gas/transit, 1x elsewhere
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'united', 2.00, 'multiplier', NULL, NULL, 'United flights and purchases'
+FROM card_ids c WHERE c.slug = 'chase_united_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 2.00, 'multiplier', NULL, NULL, 'Directly with United'
+FROM card_ids c WHERE c.slug = 'chase_united_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_united_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'gas', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_united_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'transit', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_united_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CHASE IHG ONE REWARDS PREMIER ─────────────────────────────────────────
+-- 10x IHG, 5x dining/gas, 3x all other
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'ihg', 10.00, 'multiplier', NULL, NULL, 'At IHG Hotels & Resorts'
+FROM card_ids c WHERE c.slug = 'chase_ihg_one_rewards_premier'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 10.00, 'multiplier', NULL, NULL, 'At IHG Hotels & Resorts'
+FROM card_ids c WHERE c.slug = 'chase_ihg_one_rewards_premier'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 5.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_ihg_one_rewards_premier'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'gas', 5.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_ihg_one_rewards_premier'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'other', 3.00, 'multiplier', NULL, NULL, 'On all other purchases'
+FROM card_ids c WHERE c.slug = 'chase_ihg_one_rewards_premier'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CHASE IHG ONE REWARDS TRAVELER ────────────────────────────────────────
+-- 5x IHG, 3x dining/gas
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'ihg', 5.00, 'multiplier', NULL, NULL, 'At IHG Hotels & Resorts'
+FROM card_ids c WHERE c.slug = 'chase_ihg_one_rewards_traveler'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 5.00, 'multiplier', NULL, NULL, 'At IHG Hotels & Resorts'
+FROM card_ids c WHERE c.slug = 'chase_ihg_one_rewards_traveler'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 3.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_ihg_one_rewards_traveler'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'gas', 3.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_ihg_one_rewards_traveler'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CHASE MARRIOTT BONVOY BOLD ────────────────────────────────────────────
+-- 3x Marriott, 2x travel, 1x elsewhere
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'marriott', 3.00, 'multiplier', NULL, NULL, 'At Marriott Bonvoy hotels'
+FROM card_ids c WHERE c.slug = 'chase_marriott_bold'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 3.00, 'multiplier', NULL, NULL, 'At Marriott Bonvoy hotels'
+FROM card_ids c WHERE c.slug = 'chase_marriott_bold'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'travel', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_marriott_bold'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CHASE AEROPLAN ────────────────────────────────────────────────────────
+-- 3x Air Canada/flights, 3x dining, 3x groceries
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 3.00, 'multiplier', NULL, NULL, 'Air Canada and Star Alliance flights'
+FROM card_ids c WHERE c.slug = 'chase_aeroplan'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 3.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_aeroplan'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'groceries', 3.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_aeroplan'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CHASE BRITISH AIRWAYS VISA ────────────────────────────────────────────
+-- 3x British Airways/partner flights, 2x hotels, 1x elsewhere
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 3.00, 'multiplier', NULL, NULL, 'British Airways, Iberia, Aer Lingus, Finnair'
+FROM card_ids c WHERE c.slug = 'chase_british_airways'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'chase_british_airways'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── AMEX EVERYDAY ─────────────────────────────────────────────────────────
+-- 2x US supermarkets (up to $6k/year), 1x everywhere
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'groceries', 2.00, 'multiplier', 6000.00, 'annual', 'At US supermarkets; then 1x'
+FROM card_ids c WHERE c.slug = 'amex_everyday'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── AMEX EVERYDAY PREFERRED ───────────────────────────────────────────────
+-- 3x US supermarkets (up to $6k/year), 2x US gas stations
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'groceries', 3.00, 'multiplier', 6000.00, 'annual', 'At US supermarkets; then 1x'
+FROM card_ids c WHERE c.slug = 'amex_everyday_preferred'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'gas', 2.00, 'multiplier', NULL, NULL, 'At US gas stations'
+FROM card_ids c WHERE c.slug = 'amex_everyday_preferred'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── AMEX CASH MAGNET ──────────────────────────────────────────────────────
+-- 1.5% on everything
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'other', 1.50, 'cashback', NULL, NULL, 'On all purchases'
+FROM card_ids c WHERE c.slug = 'amex_cash_magnet'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── AMEX BLUE BUSINESS CASH ───────────────────────────────────────────────
+-- 2% on all purchases (up to $50k/year), then 1%
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'other', 2.00, 'cashback', 50000.00, 'annual', 'On all purchases up to $50k/year; then 1%'
+FROM card_ids c WHERE c.slug = 'amex_blue_business_cash'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── AMEX BLUE BUSINESS PLUS ───────────────────────────────────────────────
+-- 2x MR on all purchases (up to $50k/year), then 1x
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'other', 2.00, 'multiplier', 50000.00, 'annual', 'On all purchases up to $50k/year; then 1x'
+FROM card_ids c WHERE c.slug = 'amex_blue_business_plus'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── AMEX MARRIOTT BONVOY BUSINESS ─────────────────────────────────────────
+-- 6x Marriott, 4x dining/gas, 2x everything
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'marriott', 6.00, 'multiplier', NULL, NULL, 'At Marriott Bonvoy hotels'
+FROM card_ids c WHERE c.slug = 'amex_marriott_bonvoy_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 6.00, 'multiplier', NULL, NULL, 'At Marriott Bonvoy hotels'
+FROM card_ids c WHERE c.slug = 'amex_marriott_bonvoy_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 4.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'amex_marriott_bonvoy_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'gas', 4.00, 'multiplier', NULL, NULL, 'At US gas stations'
+FROM card_ids c WHERE c.slug = 'amex_marriott_bonvoy_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'other', 2.00, 'multiplier', NULL, NULL, 'On all other purchases'
+FROM card_ids c WHERE c.slug = 'amex_marriott_bonvoy_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── AMEX HILTON HONORS BUSINESS ───────────────────────────────────────────
+-- 12x Hilton, 6x dining/gas/phone, 3x everything
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hilton', 12.00, 'multiplier', NULL, NULL, 'At Hilton hotels'
+FROM card_ids c WHERE c.slug = 'amex_hilton_honors_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 12.00, 'multiplier', NULL, NULL, 'At Hilton hotels'
+FROM card_ids c WHERE c.slug = 'amex_hilton_honors_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 6.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'amex_hilton_honors_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'gas', 6.00, 'multiplier', NULL, NULL, 'At US gas stations'
+FROM card_ids c WHERE c.slug = 'amex_hilton_honors_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'other', 3.00, 'multiplier', NULL, NULL, 'On all other purchases'
+FROM card_ids c WHERE c.slug = 'amex_hilton_honors_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── AMEX DELTA GOLD BUSINESS ──────────────────────────────────────────────
+-- 2x Delta, 2x dining, 2x gas, 1x elsewhere
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'delta', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'amex_delta_gold_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 2.00, 'multiplier', NULL, NULL, 'Directly with Delta'
+FROM card_ids c WHERE c.slug = 'amex_delta_gold_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'amex_delta_gold_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'gas', 2.00, 'multiplier', NULL, NULL, 'At US gas stations'
+FROM card_ids c WHERE c.slug = 'amex_delta_gold_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── AMEX DELTA PLATINUM BUSINESS ──────────────────────────────────────────
+-- 3x Delta, 1.5x all other
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'delta', 3.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'amex_delta_platinum_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 3.00, 'multiplier', NULL, NULL, 'Directly with Delta'
+FROM card_ids c WHERE c.slug = 'amex_delta_platinum_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'other', 1.50, 'multiplier', NULL, NULL, 'On all other purchases'
+FROM card_ids c WHERE c.slug = 'amex_delta_platinum_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CITI AADVANTAGE PLATINUM SELECT ───────────────────────────────────────
+-- 2x AA flights, 2x dining, 2x hotels, 2x gas
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 2.00, 'multiplier', NULL, NULL, 'American Airlines purchases'
+FROM card_ids c WHERE c.slug = 'citi_aadvantage_platinum_select'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'citi_aadvantage_platinum_select'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'citi_aadvantage_platinum_select'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'gas', 2.00, 'multiplier', NULL, NULL, 'At gas stations'
+FROM card_ids c WHERE c.slug = 'citi_aadvantage_platinum_select'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CITI AADVANTAGE EXECUTIVE ─────────────────────────────────────────────
+-- 4x AA flights, 1x everywhere (value is the Admirals Club lounge access)
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 4.00, 'multiplier', NULL, NULL, 'American Airlines purchases'
+FROM card_ids c WHERE c.slug = 'citi_aadvantage_executive'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CITI AADVANTAGE MILEUP ────────────────────────────────────────────────
+-- 2x AA flights, 2x groceries
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 2.00, 'multiplier', NULL, NULL, 'American Airlines purchases'
+FROM card_ids c WHERE c.slug = 'citi_aadvantage_mileup'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'groceries', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'citi_aadvantage_mileup'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CAPITAL ONE VENTURE X BUSINESS ────────────────────────────────────────
+-- 10x hotels/car rentals via C1 Travel, 5x flights via C1 Travel, 2x everywhere
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 10.00, 'multiplier', NULL, NULL, 'Via Capital One Travel portal'
+FROM card_ids c WHERE c.slug = 'capital_one_venture_x_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'car_rental', 10.00, 'multiplier', NULL, NULL, 'Via Capital One Travel portal'
+FROM card_ids c WHERE c.slug = 'capital_one_venture_x_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 5.00, 'multiplier', NULL, NULL, 'Via Capital One Travel portal'
+FROM card_ids c WHERE c.slug = 'capital_one_venture_x_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'travel', 5.00, 'multiplier', NULL, NULL, 'Via Capital One Travel portal'
+FROM card_ids c WHERE c.slug = 'capital_one_venture_x_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'other', 2.00, 'multiplier', NULL, NULL, 'On all other purchases'
+FROM card_ids c WHERE c.slug = 'capital_one_venture_x_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CAPITAL ONE SPARK MILES ───────────────────────────────────────────────
+-- 5x hotels/car rentals via C1 Travel, 2x everywhere
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 5.00, 'multiplier', NULL, NULL, 'Via Capital One Travel portal'
+FROM card_ids c WHERE c.slug = 'capital_one_spark_miles'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'car_rental', 5.00, 'multiplier', NULL, NULL, 'Via Capital One Travel portal'
+FROM card_ids c WHERE c.slug = 'capital_one_spark_miles'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'other', 2.00, 'multiplier', NULL, NULL, 'On all other purchases'
+FROM card_ids c WHERE c.slug = 'capital_one_spark_miles'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── CAPITAL ONE SPARK MILES SELECT ────────────────────────────────────────
+-- 5x hotels/car rentals via C1 Travel, 1.5x everywhere
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 5.00, 'multiplier', NULL, NULL, 'Via Capital One Travel portal'
+FROM card_ids c WHERE c.slug = 'capital_one_spark_miles_select'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'car_rental', 5.00, 'multiplier', NULL, NULL, 'Via Capital One Travel portal'
+FROM card_ids c WHERE c.slug = 'capital_one_spark_miles_select'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'other', 1.50, 'multiplier', NULL, NULL, 'On all other purchases'
+FROM card_ids c WHERE c.slug = 'capital_one_spark_miles_select'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── WELLS FARGO AUTOGRAPH JOURNEY ─────────────────────────────────────────
+-- 5x hotels, 4x airlines, 3x other travel, 1x everything
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 5.00, 'cashback', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'wells_fargo_autograph_journey'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 4.00, 'cashback', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'wells_fargo_autograph_journey'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'travel', 3.00, 'cashback', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'wells_fargo_autograph_journey'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── BANK OF AMERICA ALASKA AIRLINES BUSINESS ──────────────────────────────
+-- 3x Alaska Airlines, 1x everything
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 3.00, 'multiplier', NULL, NULL, 'Alaska Airlines purchases'
+FROM card_ids c WHERE c.slug = 'bofa_alaska_airlines_business'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── BILT MASTERCARD ───────────────────────────────────────────────────────
+-- 3x dining, 2x travel, 1x rent (up to 100k pts/year), 1x everything
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 3.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'bilt_mastercard'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'travel', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'bilt_mastercard'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'bilt_mastercard'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 2.00, 'multiplier', NULL, NULL, NULL
+FROM card_ids c WHERE c.slug = 'bilt_mastercard'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'rent', 1.00, 'multiplier', NULL, NULL, 'Via Bilt app on rent day (1st of month); no fee to pay rent'
+FROM card_ids c WHERE c.slug = 'bilt_mastercard'
 ON CONFLICT (card_id, category_slug) DO NOTHING;

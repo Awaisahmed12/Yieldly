@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Bug Fixing Workflow
+
+When a bug is reported:
+1. **Do not attempt to fix it immediately.**
+2. First, write a test that reproduces the bug (proves it fails).
+3. Then use subagents to attempt fixes.
+4. A fix is only valid when the test passes.
+
 ## Commands
 
 ```bash

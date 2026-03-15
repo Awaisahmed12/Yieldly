@@ -19,6 +19,10 @@ export const BANKS: BankMeta[] = [
   { slug: 'robinhood',   displayName: 'Robinhood',        brandColor: '#00C805', initials: 'RH' },
   { slug: 'cash_app',    displayName: 'Cash App',         brandColor: '#00D632', initials: 'CA' },
   { slug: 'synchrony',   displayName: 'Synchrony',        brandColor: '#0071CE', initials: 'SY' },
+  { slug: 'barclays',   displayName: 'Barclays',         brandColor: '#00AEEF', initials: 'BR' },
+  { slug: 'costco',     displayName: 'Costco',           brandColor: '#005DAA', initials: 'CO' },
+  { slug: 'sams_club',  displayName: "Sam's Club",       brandColor: '#0067A0', initials: 'SC' },
+  { slug: 'bilt',       displayName: 'Bilt',             brandColor: '#D84848', initials: 'BT' },
 ]
 
 export const BANK_MAP = Object.fromEntries(BANKS.map(b => [b.slug, b]))

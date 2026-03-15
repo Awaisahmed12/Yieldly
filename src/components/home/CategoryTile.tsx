@@ -45,7 +45,9 @@ const ICON_MAP: Record<string, LucideIcon> = {
 
 // Small clarifying subtitles for ambiguous categories
 const SUBTITLES: Record<string, string> = {
-  travel: 'via portal',
+  travel:     'via portal',
+  transit:    'bus, train, subway',
+  car_rental: 'Hertz, Enterprise, etc.',
 }
 
 interface CategoryTileProps {
