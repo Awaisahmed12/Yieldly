@@ -96,17 +96,6 @@ export function AuthPage() {
             <div className="flex bg-surface border border-border rounded-lg p-1 gap-1">
               <button
                 type="button"
-                onClick={() => switchMode('email')}
-                className={`flex-1 py-2 rounded-md font-mono text-xs transition-colors ${
-                  mode === 'email'
-                    ? 'bg-accent text-bg'
-                    : 'text-muted hover:text-text-primary'
-                }`}
-              >
-                Email
-              </button>
-              <button
-                type="button"
                 onClick={() => switchMode('phone')}
                 className={`flex-1 py-2 rounded-md font-mono text-xs transition-colors ${
                   mode === 'phone'
@@ -115,6 +104,17 @@ export function AuthPage() {
                 }`}
               >
                 Phone
+              </button>
+              <button
+                type="button"
+                onClick={() => switchMode('email')}
+                className={`flex-1 py-2 rounded-md font-mono text-xs transition-colors ${
+                  mode === 'email'
+                    ? 'bg-accent text-bg'
+                    : 'text-muted hover:text-text-primary'
+                }`}
+              >
+                Email
               </button>
             </div>
 
