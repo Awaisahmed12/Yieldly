@@ -19,6 +19,7 @@ type CardRow = {
   cpp_default: number | null
   cpp_high: number | null
   annual_fee: number
+  foreign_transaction_fee: number
   is_active: boolean
   created_at: string
 }

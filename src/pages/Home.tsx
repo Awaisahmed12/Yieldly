@@ -132,6 +132,26 @@ export function HomePage() {
         </div>
       )}
 
+      {/* Tools row */}
+      <div className="mx-4 mb-4 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={() => navigate('/optimize')}
+          className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
+        >
+          <span className="font-mono text-xs text-accent">Spending Mix</span>
+          <span className="font-mono text-[10px] text-muted leading-snug">Best card for your overall spend</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate('/compare')}
+          className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
+        >
+          <span className="font-mono text-xs text-accent">Compare Cards</span>
+          <span className="font-mono text-[10px] text-muted leading-snug">Side-by-side across categories</span>
+        </button>
+      </div>
+
       {/* Category grid */}
       <CategoryGrid
         categories={categories}
@@ -162,7 +182,7 @@ export function HomePage() {
             <>
               <ResultCard result={winner} bank={winnerBank} />
               {tie && <TiebreakerNote tie={tie} />}
-              <RankedList results={ranked} />
+              <RankedList results={ranked} isForeignSpending={selectedSlug === 'foreign_spending'} />
             </>
           ) : (
             <div className="px-4 py-10 text-center">

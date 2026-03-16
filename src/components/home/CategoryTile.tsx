@@ -11,6 +11,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   UtensilsCrossed,
   Fuel,
   Plane: Globe,        // Travel = portal = Globe
+  Globe,               // Foreign spending
   PlaneTakeoff,        // Flights = PlaneTakeoff
   Hotel,
   Tv,
@@ -45,9 +46,10 @@ const ICON_MAP: Record<string, LucideIcon> = {
 
 // Small clarifying subtitles for ambiguous categories
 const SUBTITLES: Record<string, string> = {
-  travel:     'via portal',
-  transit:    'bus, train, subway',
-  car_rental: 'Hertz, Enterprise, etc.',
+  travel:           'via portal',
+  transit:          'bus, train, subway',
+  car_rental:       'Hertz, Enterprise, etc.',
+  foreign_spending: 'incl. FTF impact',
 }
 
 interface CategoryTileProps {

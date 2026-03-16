@@ -4,9 +4,19 @@ import type { RankedResult } from '../../types/reward'
 interface RankedListItemProps {
   result: RankedResult
   isWinner: boolean
+  isForeignSpending?: boolean
 }
 
-export function RankedListItem({ result, isWinner }: RankedListItemProps) {
+export function RankedListItem({ result, isWinner, isForeignSpending = false }: RankedListItemProps) {
+  const hasFtf = isForeignSpending && result.ftfApplied > 0
+  const isNegative = result.effectiveCpd < 0
+  const annualFee = result.card.annual_fee
+
+  // Break-even: how much to spend here to earn back the annual fee
+  const breakEvenSpend = annualFee > 0 && result.effectiveCpd > 0
+    ? Math.ceil(annualFee / result.effectiveCpd)
+    : null
+
   return (
     <div
       className={`px-4 py-3.5 flex items-start gap-3 border-b border-border/50 last:border-0 ${
@@ -34,16 +44,40 @@ export function RankedListItem({ result, isWinner }: RankedListItemProps) {
             </span>
           )}
         </div>
-        {result.notes && (
+
+        {/* FTF explanation */}
+        {hasFtf && (
+          <p className={`font-mono text-xs mt-0.5 leading-snug ${isNegative ? 'text-red-400/80' : 'text-muted/70'}`}>
+            {isNegative
+              ? `Earns ${(result.effectiveCpd * 100 + result.ftfApplied).toFixed(1)}% but ${result.ftfApplied}% FTF = net ${result.estimatedPct}%`
+              : `${result.ftfApplied}% foreign fee applied`
+            }
+          </p>
+        )}
+
+        {result.notes && !hasFtf && (
           <p className="font-mono text-xs text-muted/70 mt-0.5 leading-snug">
             {result.notes}
+          </p>
+        )}
+
+        {/* Annual fee break-even */}
+        {breakEvenSpend && (
+          <p className="font-mono text-xs text-muted/50 mt-0.5 leading-snug">
+            Spend ${breakEvenSpend.toLocaleString()}/yr to cover ${annualFee} fee
           </p>
         )}
       </div>
 
       {/* Rate */}
       <div className="flex-shrink-0 text-right">
-        <span className={`font-mono text-sm font-medium ${isWinner ? 'text-accent' : 'text-muted'}`}>
+        <span className={`font-mono text-sm font-medium ${
+          isNegative && isForeignSpending
+            ? 'text-red-400'
+            : isWinner
+              ? 'text-accent'
+              : 'text-muted'
+        }`}>
           {formatRateShort(result)}
         </span>
       </div>

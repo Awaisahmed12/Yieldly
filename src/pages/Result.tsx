@@ -37,7 +37,7 @@ export function ResultPage() {
           {tie && <TiebreakerNote tie={tie} />}
 
           {/* Full ranked list */}
-          <RankedList results={ranked} />
+          <RankedList results={ranked} isForeignSpending={slug === 'foreign_spending'} />
         </div>
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 px-4">

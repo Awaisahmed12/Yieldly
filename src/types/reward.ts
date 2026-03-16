@@ -21,6 +21,7 @@ export interface RankedResult {
   hasCap: boolean
   isTie: boolean
   rank: number
+  ftfApplied: number         // foreign transaction fee deducted (0 for normal categories)
 }
 
 export interface TiebreakerFactor {

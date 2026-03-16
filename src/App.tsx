@@ -7,6 +7,8 @@ import { OnboardingPage } from './pages/Onboarding'
 import { HomePage } from './pages/Home'
 import { SettingsPage } from './pages/Settings'
 import { AdminPage } from './pages/Admin'
+import { OptimizePage } from './pages/Optimize'
+import { ComparePage } from './pages/Compare'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
@@ -68,8 +70,8 @@ function AppRoutes() {
           </AuthRoute>
         }
       />
-      <Route path="/onboarding" element={<OnboardingPage />} />
-      <Route path="/" element={<HomePage />} />
+      <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
+      <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
       <Route
         path="/settings"
         element={
@@ -79,6 +81,8 @@ function AppRoutes() {
         }
       />
       <Route path="/admin" element={<AdminPage />} />
+      <Route path="/optimize" element={<ProtectedRoute><OptimizePage /></ProtectedRoute>} />
+      <Route path="/compare" element={<ProtectedRoute><ComparePage /></ProtectedRoute>} />
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

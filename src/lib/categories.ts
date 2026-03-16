@@ -3,7 +3,7 @@ import type { CardUnlockRow, CategoryRow, RewardRateRow, SubpromptOption } from 
 const BASE_CATEGORY_SLUGS = [
   'groceries', 'dining', 'gas', 'travel', 'flights', 'hotels',
   'streaming', 'pharmacy', 'entertainment', 'transit',
-  'online_shopping', 'rent', 'wholesale_clubs',
+  'online_shopping', 'rent', 'wholesale_clubs', 'car_rental', 'foreign_spending',
 ]
 
 /**
@@ -31,8 +31,11 @@ export function filterRelevantCategories(
   allRates: RewardRateRow[]
 ): string[] {
   return slugs.filter(slug => {
-    // 'other' is never shown as a tile
     if (slug === 'other') return false
+    // foreign_spending is always shown if the user has cards — it has no reward_rates rows
+    if (slug === 'foreign_spending') return userCardIds.length > 0
+    // car_rental is always shown (has reward_rates and most users benefit from knowing)
+    if (slug === 'car_rental') return allRates.some(r => userCardIds.includes(r.card_id) && r.category_slug === slug)
 
     return allRates.some(r =>
       userCardIds.includes(r.card_id) &&

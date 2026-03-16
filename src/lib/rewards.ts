@@ -49,14 +49,18 @@ export function rankCardsForCategory(
   allRates: RewardRateRow[],
   cppMode: CppMode
 ): RankedResult[] {
+  const isForeignSpending = categorySlug === 'foreign_spending'
+
   const results: RankedResult[] = userCards.map(card => {
-    // Find specific rate for this category
+    // For foreign_spending: use the card's base (other) rate, then deduct FTF
+    const lookupSlug = isForeignSpending ? 'other' : categorySlug
+
     const rateRow = allRates.find(
-      r => r.card_id === card.id && r.category_slug === categorySlug
+      r => r.card_id === card.id && r.category_slug === lookupSlug
     )
 
     // Fallback: check 'other' category for base rate (handles flat-rate cards like CFU 1.5%)
-    const otherRateRow = allRates.find(
+    const otherRateRow = isForeignSpending ? null : allRates.find(
       r => r.card_id === card.id && r.category_slug === 'other'
     )
 
@@ -66,7 +70,9 @@ export function rankCardsForCategory(
     const rateType = (activeRow?.rate_type ?? 'cashback') as 'multiplier' | 'cashback'
 
     const cpp = getCpp(card, cppMode)
-    const effectiveCpd = computeEffectiveCpd(rate, rateType, cpp)
+    const baseCpd = computeEffectiveCpd(rate, rateType, cpp)
+    const ftf = isForeignSpending ? (card.foreign_transaction_fee ?? 0) : 0
+    const effectiveCpd = baseCpd - ftf / 100
     const estimatedPct = parseFloat((effectiveCpd * 100).toFixed(2))
 
     return {
@@ -80,6 +86,7 @@ export function rankCardsForCategory(
       hasCap: activeRow?.cap_amount != null,
       isTie: false,  // set after sorting
       rank: 0,       // set after sorting
+      ftfApplied: ftf,
     }
   })
 

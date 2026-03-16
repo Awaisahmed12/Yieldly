@@ -21,7 +21,7 @@ function formatDisplayPhone(digits: string): string {
 export function AuthPage() {
   const navigate = useNavigate()
   const [step, setStep] = useState<AuthStep>('input')
-  const [mode, setMode] = useState<AuthMode>('email')
+  const [mode] = useState<AuthMode>('email')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [otp, setOtp] = useState('')
@@ -75,10 +75,6 @@ export function AuthPage() {
     if (value.length === 6) handleVerifyOtp(value)
   }
 
-  function switchMode(next: AuthMode) {
-    setMode(next)
-    setError(null)
-  }
 
   const displayIdentifier = mode === 'email' ? identifier : identifier.replace('+1', '')
 
