@@ -1,4 +1,5 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useCategories } from '../hooks/useCategories'
 import { useRewardData } from '../hooks/useRewardData'
 import { useRewardLookup } from '../hooks/useRewardLookup'
@@ -8,6 +9,7 @@ import { TopNav } from '../components/shared/TopNav'
 import { CategoryGrid } from '../components/home/CategoryGrid'
 import { SubpromptSheet } from '../components/home/SubpromptSheet'
 import { InstallBanner } from '../components/shared/InstallBanner'
+import { SaveCardsNudge } from '../components/shared/SaveCardsNudge'
 import { ResultCard } from '../components/result/ResultCard'
 import { RankedList } from '../components/result/RankedList'
 import { TiebreakerNote } from '../components/result/TiebreakerNote'
@@ -19,33 +21,54 @@ interface SubpromptState {
   parentLabel: string
 }
 
+type NudgeVariant = 'personalize' | 'save' | null
+
 export function HomePage() {
+  const navigate = useNavigate()
   const { categories, loading } = useCategories()
   const { unlocks, categories: allCategories, banks } = useRewardData()
-  const { userCardIds } = useUserStore()
+  const { userCardIds, isGuest, hasCustomizedCards } = useUserStore()
   const [subprompt, setSubprompt] = useState<SubpromptState | null>(null)
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
   const [resultVisible, setResultVisible] = useState(false)
+  const [activeNudge, setActiveNudge] = useState<NudgeVariant>(null)
   const resultRef = useRef<HTMLDivElement>(null)
 
   const { ranked, winner, tie, loading: resultLoading } = useRewardLookup(selectedSlug)
   const categoryName = allCategories.find(c => c.slug === selectedSlug)?.display_name ?? ''
   const winnerBank = winner ? banks.find(b => b.id === winner.card.bank_id) ?? null : null
 
+  // Show "save across devices" nudge ~1.5s after guest customizes their cards
+  useEffect(() => {
+    if (!isGuest || !hasCustomizedCards) return
+    const alreadyDismissed = sessionStorage.getItem('save_nudge_dismissed')
+    if (alreadyDismissed) return
+    const timer = setTimeout(() => setActiveNudge('save'), 1500)
+    return () => clearTimeout(timer)
+  }, [isGuest, hasCustomizedCards])
+
   const openResult = useCallback((slug: string) => {
     setResultVisible(false)
     setSelectedSlug(slug)
     requestAnimationFrame(() => {
       setResultVisible(true)
-      // Scroll so the label + top of the winner card peek into view — user scrolls for the rest
       setTimeout(() => {
         if (resultRef.current) {
           const top = resultRef.current.getBoundingClientRect().top + window.scrollY
           window.scrollTo({ top: top - window.innerHeight * 0.55, behavior: 'smooth' })
         }
       }, 50)
+
+      // Show personalization nudge after first result view for guests without customized cards
+      if (isGuest && !hasCustomizedCards) {
+        const alreadyShown = sessionStorage.getItem('result_viewed')
+        if (!alreadyShown) {
+          sessionStorage.setItem('result_viewed', '1')
+          setTimeout(() => setActiveNudge('personalize'), 800)
+        }
+      }
     })
-  }, [])
+  }, [isGuest, hasCustomizedCards])
 
   function handleCategoryTap(slug: string) {
     const options = getSubpromptOptions(slug, userCardIds, unlocks, allCategories)
@@ -62,6 +85,22 @@ export function HomePage() {
     openResult(slug)
   }
 
+  function handleNudgeConfirm() {
+    setActiveNudge(null)
+    if (activeNudge === 'personalize') {
+      navigate('/onboarding')
+    } else {
+      navigate('/auth')
+    }
+  }
+
+  function handleNudgeDismiss() {
+    if (activeNudge === 'save') {
+      sessionStorage.setItem('save_nudge_dismissed', '1')
+    }
+    setActiveNudge(null)
+  }
+
   return (
     <div className="bg-bg max-w-[480px] mx-auto min-h-dvh pb-24">
       <TopNav showSettings title="Yieldly" />
@@ -74,6 +113,24 @@ export function HomePage() {
           Select a Category
         </h1>
       </div>
+
+      {/* Popular cards banner for guests who haven't customized */}
+      {isGuest && !hasCustomizedCards && (
+        <div className="mx-4 mb-4">
+          <button
+            type="button"
+            onClick={() => navigate('/onboarding')}
+            className="w-full flex items-center justify-between bg-surface border border-border rounded-lg px-4 py-3 text-left hover:border-accent/50 transition-colors"
+          >
+            <span className="font-mono text-xs text-muted">
+              Showing popular cards
+            </span>
+            <span className="font-mono text-xs text-accent">
+              Personalize your wallet →
+            </span>
+          </button>
+        </div>
+      )}
 
       {/* Category grid */}
       <CategoryGrid
@@ -128,6 +185,15 @@ export function HomePage() {
       />
 
       <InstallBanner />
+
+      {/* Guest nudge bottom sheet */}
+      {activeNudge && (
+        <SaveCardsNudge
+          variant={activeNudge}
+          onConfirm={handleNudgeConfirm}
+          onDismiss={handleNudgeDismiss}
+        />
+      )}
     </div>
   )
 }

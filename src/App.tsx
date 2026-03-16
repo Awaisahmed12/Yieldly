@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
+import { useGuestCardSync } from './hooks/useGuestCardSync'
 import { useUserStore } from './store/userStore'
 import { AuthPage } from './pages/Auth'
 import { OnboardingPage } from './pages/Onboarding'
@@ -9,12 +10,10 @@ import { AdminPage } from './pages/Admin'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
-  requireOnboarding?: boolean
 }
 
-function ProtectedRoute({ children, requireOnboarding = false }: ProtectedRouteProps) {
+function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { user, loading } = useUserStore()
-  const prefs = useUserStore((s) => s.prefs)
   const location = useLocation()
 
   if (loading) {
@@ -27,10 +26,6 @@ function ProtectedRoute({ children, requireOnboarding = false }: ProtectedRouteP
 
   if (!user) {
     return <Navigate to="/auth" state={{ from: location }} replace />
-  }
-
-  if (requireOnboarding && prefs && !prefs.onboarding_complete) {
-    return <Navigate to="/onboarding" replace />
   }
 
   return <>{children}</>
@@ -60,8 +55,8 @@ function AuthRoute({ children }: { children: React.ReactNode }) {
 }
 
 function AppRoutes() {
-  // Initialize auth state at the app level
   useAuth()
+  useGuestCardSync()
 
   return (
     <Routes>
@@ -73,22 +68,8 @@ function AppRoutes() {
           </AuthRoute>
         }
       />
-      <Route
-        path="/onboarding"
-        element={
-          <ProtectedRoute>
-            <OnboardingPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute requireOnboarding>
-            <HomePage />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/onboarding" element={<OnboardingPage />} />
+      <Route path="/" element={<HomePage />} />
       <Route
         path="/settings"
         element={

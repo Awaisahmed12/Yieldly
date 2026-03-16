@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useUserStore } from '../store/userStore'
 import { useRewardData } from '../hooks/useRewardData'
+import { setGuestCardSlugs } from '../lib/guestStorage'
 import { OnboardingShell } from '../components/onboarding/OnboardingShell'
 import { LoadingSpinner } from '../components/shared/LoadingSpinner'
 import type { UserPreferencesRow } from '../types/supabase'
@@ -11,7 +12,8 @@ export function OnboardingPage() {
   const navigate = useNavigate()
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
-  const { user, setPrefs, setUserCards } = useUserStore()
+  const { user, setPrefs, setUserCards, setGuestCards } = useUserStore()
+  const isGuest = useUserStore((s) => s.isGuest)
   const { banks, cards, loading } = useRewardData()
 
   async function handleSkip() {
@@ -28,23 +30,28 @@ export function OnboardingPage() {
   }
 
   async function handleComplete(selectedCardIds: string[]) {
-    if (!user) return
+    // Guest path — save to localStorage, no DB
+    if (!user) {
+      const selectedCards = cards.filter((c) => selectedCardIds.includes(c.id))
+      setGuestCardSlugs(selectedCards.map((c) => c.slug))
+      setGuestCards(selectedCards, true)
+      navigate('/')
+      return
+    }
 
+    // Authenticated path
     try {
-      // Delete existing user_cards rows for this user
       await supabase
         .from('user_cards')
         .delete()
         .eq('user_id', user.id)
 
-      // Insert new user_cards rows
       if (selectedCardIds.length > 0) {
         await supabase
           .from('user_cards')
           .insert(selectedCardIds.map(cardId => ({ user_id: user.id, card_id: cardId })))
       }
 
-      // Upsert user_preferences with onboarding_complete
       const { data: prefsData } = await supabase
         .from('user_preferences')
         .upsert({
@@ -57,7 +64,6 @@ export function OnboardingPage() {
 
       if (prefsData) setPrefs(prefsData as UserPreferencesRow)
 
-      // Update user cards in store
       const selectedCards = cards.filter(c => selectedCardIds.includes(c.id))
       setUserCards(selectedCards)
 
@@ -69,16 +75,31 @@ export function OnboardingPage() {
 
   return (
     <div className="min-h-dvh bg-bg">
-      {/* Skip link */}
-      <div className="absolute top-4 right-4 z-10">
-        <button
-          type="button"
-          onClick={handleSkip}
-          className="font-mono text-xs text-muted hover:text-text-primary transition-colors"
-        >
-          Skip for now
-        </button>
-      </div>
+      {/* Skip link — only shown for authenticated users */}
+      {user && (
+        <div className="absolute top-4 right-4 z-10">
+          <button
+            type="button"
+            onClick={handleSkip}
+            className="font-mono text-xs text-muted hover:text-text-primary transition-colors"
+          >
+            Skip for now
+          </button>
+        </div>
+      )}
+
+      {/* Back link for guests */}
+      {isGuest && (
+        <div className="absolute top-4 left-4 z-10">
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="font-mono text-xs text-muted hover:text-text-primary transition-colors"
+          >
+            ← Back
+          </button>
+        </div>
+      )}
 
       {loading ? (
         <div className="min-h-dvh flex flex-col items-center justify-center gap-4">

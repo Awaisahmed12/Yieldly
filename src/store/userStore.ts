@@ -9,12 +9,19 @@ interface UserState {
   userCardIds: string[]
   prefs: UserPreferencesRow | null
   loading: boolean
+  isGuest: boolean
+  hasCustomizedCards: boolean
+  showSaveNudge: boolean
   setSession: (session: Session | null) => void
   setUser: (user: User | null) => void
   setUserCards: (cards: CardRow[]) => void
   setPrefs: (prefs: UserPreferencesRow | null) => void
   setLoading: (loading: boolean) => void
   reset: () => void
+  setGuestCards: (cards: CardRow[], hasCustomized: boolean) => void
+  clearGuest: () => void
+  showSaveNudgePrompt: () => void
+  dismissSaveNudge: () => void
 }
 
 const initialState = {
@@ -24,6 +31,9 @@ const initialState = {
   userCardIds: [],
   prefs: null,
   loading: true,
+  isGuest: false,
+  hasCustomizedCards: false,
+  showSaveNudge: false,
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -44,4 +54,23 @@ export const useUserStore = create<UserState>((set) => ({
   setLoading: (loading) => set({ loading }),
 
   reset: () => set(initialState),
+
+  setGuestCards: (cards, hasCustomized) =>
+    set({
+      userCards: cards,
+      userCardIds: cards.map((c) => c.id),
+      isGuest: true,
+      hasCustomizedCards: hasCustomized,
+    }),
+
+  clearGuest: () =>
+    set({
+      isGuest: false,
+      hasCustomizedCards: false,
+      showSaveNudge: false,
+    }),
+
+  showSaveNudgePrompt: () => set({ showSaveNudge: true }),
+
+  dismissSaveNudge: () => set({ showSaveNudge: false }),
 }))

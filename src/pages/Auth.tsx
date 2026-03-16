@@ -1,4 +1,5 @@
 import { useState, FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { OtpInput } from '../components/auth/OtpInput'
 import { TermsText } from '../components/auth/TermsText'
@@ -12,6 +13,7 @@ function formatPhone(raw: string): string {
 }
 
 export function AuthPage() {
+  const navigate = useNavigate()
   const [step, setStep] = useState<AuthStep>('input')
   const [mode, setMode] = useState<AuthMode>('phone')
   const [email, setEmail] = useState('')
@@ -204,6 +206,16 @@ export function AuthPage() {
 
         <div className="mt-8">
           <TermsText />
+        </div>
+
+        <div className="mt-6 text-center">
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="font-mono text-xs text-muted hover:text-text-primary transition-colors"
+          >
+            Try without an account →
+          </button>
         </div>
       </div>
     </div>
