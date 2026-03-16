@@ -68,6 +68,30 @@ export function BottomSheet({ isOpen, onClose, children, title }: BottomSheetPro
     }
   }, [isOpen])
 
+  // Shift sheet above keyboard on iOS (layout viewport doesn't resize when keyboard opens)
+  useEffect(() => {
+    const sheet = sheetRef.current
+    if (!sheet || !window.visualViewport) return
+
+    function reposition() {
+      const vv = window.visualViewport!
+      const offsetFromBottom = window.innerHeight - vv.height - vv.offsetTop
+      sheet!.style.bottom = offsetFromBottom > 0 ? `${offsetFromBottom}px` : ''
+    }
+
+    if (isOpen) {
+      window.visualViewport.addEventListener('resize', reposition)
+      window.visualViewport.addEventListener('scroll', reposition)
+      reposition()
+    }
+
+    return () => {
+      window.visualViewport?.removeEventListener('resize', reposition)
+      window.visualViewport?.removeEventListener('scroll', reposition)
+      if (sheet) sheet.style.bottom = ''
+    }
+  }, [isOpen])
+
   const content = (
     <>
       {/* Overlay */}
