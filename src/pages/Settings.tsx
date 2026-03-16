@@ -97,6 +97,22 @@ export function SettingsPage() {
     supabase.auth.signOut({ scope: 'local' })
   }
 
+  async function handleDeleteAccount() {
+    if (!user) return
+    if (!window.confirm('Permanently delete your account and all data? This cannot be undone.')) return
+
+    try {
+      await supabase.from('user_cards').delete().eq('user_id', user.id)
+      await supabase.from('user_preferences').delete().eq('user_id', user.id)
+      await supabase.auth.signOut({ scope: 'local' })
+      reset()
+      navigate('/auth')
+    } catch (err) {
+      console.error('Error deleting account:', err)
+      window.alert('Something went wrong. Email ahmedawais672@gmail.com to request deletion.')
+    }
+  }
+
   const ownedCardIds = userCards.map(c => c.id)
 
   return (
@@ -192,6 +208,17 @@ export function SettingsPage() {
             className="w-full font-mono text-sm text-muted hover:text-red-400 transition-colors py-3 border border-border rounded-xl hover:border-red-400/30"
           >
             Sign out
+          </button>
+        </div>
+
+        {/* Delete account */}
+        <div className="mt-3 mx-4">
+          <button
+            type="button"
+            onClick={handleDeleteAccount}
+            className="w-full font-mono text-sm text-red-500/50 hover:text-red-400 transition-colors py-3 border border-red-500/10 rounded-xl hover:border-red-400/30"
+          >
+            Delete account
           </button>
         </div>
 
