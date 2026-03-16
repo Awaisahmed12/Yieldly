@@ -71,6 +71,11 @@ export function HomePage() {
   }, [isGuest, hasCustomizedCards])
 
   function handleCategoryTap(slug: string) {
+    if (slug === selectedSlug) {
+      setSelectedSlug(null)
+      setResultVisible(false)
+      return
+    }
     const options = getSubpromptOptions(slug, userCardIds, unlocks, allCategories)
     if (options && options.length >= 2) {
       const label = categories.find(c => c.slug === slug)?.display_name ?? slug

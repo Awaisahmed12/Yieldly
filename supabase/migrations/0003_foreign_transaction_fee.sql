@@ -71,3 +71,6 @@ ON CONFLICT (slug) DO NOTHING;
 INSERT INTO categories (slug, display_name, icon_name, is_brand, parent_slug, sort_order)
 VALUES ('car_rental', 'Car Rental', 'Car', false, null, 14)
 ON CONFLICT (slug) DO UPDATE SET display_name = EXCLUDED.display_name;
+
+-- Rename pharmacy display name
+UPDATE categories SET display_name = 'Pharmacy / Drugstore' WHERE slug = 'pharmacy';

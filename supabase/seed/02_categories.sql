@@ -11,7 +11,7 @@ INSERT INTO categories (slug, display_name, icon_name, is_brand, parent_slug, so
   ('flights',         'Flights',         'PlaneTakeoff',       false, NULL, 5),
   ('hotels',          'Hotels',          'Hotel',              false, NULL, 6),
   ('streaming',       'Streaming',       'Tv',                 false, NULL, 7),
-  ('pharmacy',        'Pharmacy',        'Pill',               false, NULL, 8),
+  ('pharmacy',        'Pharmacy / Drugstore', 'Pill',          false, NULL, 8),
   ('entertainment',   'Entertainment',   'Clapperboard',       false, NULL, 9),
   ('transit',         'Transit',         'Train',              false, NULL, 10),
   ('online_shopping', 'Online Shopping', 'ShoppingBag',        false, NULL, 11),
