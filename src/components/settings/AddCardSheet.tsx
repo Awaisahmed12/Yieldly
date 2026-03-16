@@ -45,9 +45,13 @@ export function AddCardSheet({ isOpen, onClose, onAdd, banks, allCards, ownedCar
       const coCards = allCards.filter(
         c => CO_BRANDED_DISPLAY[c.slug] === bank.slug && c.bank_id !== bank.id
       )
-      return { bank, cards: [...ownCards, ...coCards] }
+      const sorted = [...ownCards, ...coCards].sort((a, b) =>
+        a.display_name.localeCompare(b.display_name)
+      )
+      return { bank, cards: sorted }
     })
     .filter(g => g.cards.length > 0)
+    .sort((a, b) => a.bank.display_name.localeCompare(b.bank.display_name))
 
   const q = search.trim().toLowerCase()
   const visibleGroups = q

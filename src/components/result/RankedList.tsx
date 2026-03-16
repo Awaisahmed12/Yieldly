@@ -26,7 +26,7 @@ export function RankedList({ results, isForeignSpending = false }: RankedListPro
       </div>
       {isForeignSpending && (
         <p className="font-mono text-xs text-muted/50 mt-3 leading-relaxed px-1">
-          Foreign transaction fees (FTF) are charged by some cards on purchases made in a foreign currency. A card earning 1.5% but charging 3% FTF costs you 1.5% net on every foreign purchase.
+          Some cards charge a foreign transaction fee (typically 2.7–3%) on purchases made in a foreign currency or processed by a foreign bank. This fee eats into — or eliminates — your rewards.
         </p>
       )}
     </div>

@@ -45,12 +45,12 @@ export function RankedListItem({ result, isWinner, isForeignSpending = false }: 
           )}
         </div>
 
-        {/* FTF explanation */}
+        {/* Foreign fee explanation */}
         {hasFtf && (
           <p className={`font-mono text-xs mt-0.5 leading-snug ${isNegative ? 'text-red-400/80' : 'text-muted/70'}`}>
             {isNegative
-              ? `Earns ${(result.effectiveCpd * 100 + result.ftfApplied).toFixed(1)}% but ${result.ftfApplied}% FTF = net ${result.estimatedPct}%`
-              : `${result.ftfApplied}% foreign fee applied`
+              ? `Earns ${(result.effectiveCpd * 100 + result.ftfApplied).toFixed(1)}% but ${result.ftfApplied}% foreign transaction fee = net ${result.estimatedPct}%`
+              : `${result.ftfApplied}% foreign transaction fee reduces your return`
             }
           </p>
         )}

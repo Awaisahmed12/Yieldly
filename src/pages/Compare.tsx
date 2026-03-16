@@ -131,7 +131,7 @@ export function ComparePage() {
                         </span>
                         {cell.ftfApplied > 0 && (
                           <span className="block font-mono text-[9px] text-red-400/60 leading-none mt-0.5">
-                            -{cell.ftfApplied}% FTF
+                            -{cell.ftfApplied}% foreign fee
                           </span>
                         )}
                       </td>
@@ -149,11 +149,11 @@ export function ComparePage() {
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="font-mono text-xs text-red-400">-1.5%</span>
-                <span className="font-mono text-[10px] text-muted">= net loss (FTF)</span>
+                <span className="font-mono text-[10px] text-muted">= net loss abroad</span>
               </div>
             </div>
             <p className="font-mono text-[10px] text-muted/40 mt-2">
-              Rates shown as estimated % return. Foreign Spending = base rate minus foreign transaction fee.
+              Foreign Spending = base reward rate minus the card's foreign transaction fee. Some cards charge 2.7–3% on foreign purchases, which can wipe out your rewards entirely.
             </p>
           </div>
         )}

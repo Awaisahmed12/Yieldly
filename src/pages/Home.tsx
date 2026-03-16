@@ -123,7 +123,7 @@ export function HomePage() {
             className="w-full flex items-center justify-between bg-surface border border-border rounded-lg px-4 py-3 text-left hover:border-accent/50 transition-colors"
           >
             <span className="font-mono text-xs text-muted">
-              Showing popular cards
+              Using popular cards
             </span>
             <span className="font-mono text-xs text-accent">
               Personalize your wallet →
@@ -131,26 +131,6 @@ export function HomePage() {
           </button>
         </div>
       )}
-
-      {/* Tools row */}
-      <div className="mx-4 mb-4 grid grid-cols-2 gap-2">
-        <button
-          type="button"
-          onClick={() => navigate('/optimize')}
-          className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
-        >
-          <span className="font-mono text-xs text-accent">Spending Mix</span>
-          <span className="font-mono text-[10px] text-muted leading-snug">Best card for your overall spend</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => navigate('/compare')}
-          className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
-        >
-          <span className="font-mono text-xs text-accent">Compare Cards</span>
-          <span className="font-mono text-[10px] text-muted leading-snug">Side-by-side across categories</span>
-        </button>
-      </div>
 
       {/* Category grid */}
       <CategoryGrid
@@ -194,6 +174,29 @@ export function HomePage() {
           )}
         </div>
       )}
+
+      {/* Tools */}
+      <div className="mx-4 mt-8 mb-2">
+        <p className="font-mono text-[10px] text-muted uppercase tracking-[0.2em] mb-3">Tools</p>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => navigate('/optimize')}
+            className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
+          >
+            <span className="font-mono text-xs text-accent">Spending Mix</span>
+            <span className="font-mono text-[10px] text-muted leading-snug">Best card for your overall spend</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('/compare')}
+            className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
+          >
+            <span className="font-mono text-xs text-accent">Compare Cards</span>
+            <span className="font-mono text-[10px] text-muted leading-snug">Side-by-side across categories</span>
+          </button>
+        </div>
+      </div>
 
       {/* Subprompt sheet */}
       <SubpromptSheet
