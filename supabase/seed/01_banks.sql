@@ -18,5 +18,6 @@ INSERT INTO banks (slug, display_name, brand_color, sort_order) VALUES
   ('barclays',     'Barclays',        '#00AEEF', 14),
   ('costco',       'Costco',          '#005DAA', 15),
   ('sams_club',    'Sam''s Club',      '#0067A0', 16),
-  ('bilt',         'Bilt',            '#D84848', 17)
+  ('bilt',         'Bilt',            '#D84848', 17),
+  ('fidelity',     'Fidelity',        '#006B3E', 18)
 ON CONFLICT (slug) DO NOTHING;

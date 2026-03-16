@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { useUserStore } from '../../store/userStore'
 
 interface TopNavProps {
   showBack?: boolean
@@ -8,6 +9,7 @@ interface TopNavProps {
 
 export function TopNav({ showBack = false, showSettings = false, title }: TopNavProps) {
   const navigate = useNavigate()
+  const { isGuest } = useUserStore()
 
   return (
     <header
@@ -53,7 +55,15 @@ export function TopNav({ showBack = false, showSettings = false, title }: TopNav
 
       {/* Right */}
       <div className="flex items-center">
-        {showSettings && (
+        {isGuest ? (
+          <button
+            type="button"
+            onClick={() => navigate('/auth')}
+            className="font-mono text-xs text-accent hover:opacity-80 transition-opacity"
+          >
+            Sign in
+          </button>
+        ) : showSettings ? (
           <Link
             to="/settings"
             className="text-muted hover:text-text-primary transition-colors p-1 -mr-1"
@@ -74,7 +84,7 @@ export function TopNav({ showBack = false, showSettings = false, title }: TopNav
               <circle cx="12" cy="12" r="3" />
             </svg>
           </Link>
-        )}
+        ) : null}
       </div>
     </header>
   )

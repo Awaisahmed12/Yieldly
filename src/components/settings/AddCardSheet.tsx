@@ -85,7 +85,7 @@ export function AddCardSheet({ isOpen, onClose, onAdd, banks, allCards, ownedCar
         </div>
 
         {/* Card list */}
-        <div className="overflow-y-auto flex-1 border-t border-border">
+        <div className="overflow-y-auto flex-1 min-h-[200px] border-t border-border">
           {visibleGroups.length === 0 && (
             <p className="font-mono text-sm text-muted text-center py-10 px-5">
               No cards match &ldquo;{search}&rdquo;

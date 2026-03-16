@@ -595,3 +595,19 @@ INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_c
 SELECT b.id, 'bilt_mastercard', 'Bilt Mastercard', 'Bilt World Elite Mastercard®', false, 'Bilt', 1.25, 1.50, 2.00, 0.00
 FROM bank_ids b WHERE b.slug = 'bilt'
 ON CONFLICT (slug) DO NOTHING;
+
+-- ── FIDELITY ──────────────────────────────────────────────────────────────────
+
+WITH bank_ids AS (SELECT slug, id FROM banks)
+INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
+SELECT b.id, 'fidelity_rewards_visa', 'Rewards Visa', 'Fidelity® Rewards Visa Signature® Card', false, 'CB', 1.00, 1.00, 1.00, 0.00
+FROM bank_ids b WHERE b.slug = 'fidelity'
+ON CONFLICT (slug) DO NOTHING;
+
+-- ── WELLS FARGO (business) ───────────────────────────────────────────────────
+
+WITH bank_ids AS (SELECT slug, id FROM banks)
+INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
+SELECT b.id, 'wells_fargo_signify_business_cash', 'Signify Business Cash', 'Wells Fargo Signify Business Cash℠ Card', true, 'CB', 1.00, 1.00, 1.00, 0.00
+FROM bank_ids b WHERE b.slug = 'wells_fargo'
+ON CONFLICT (slug) DO NOTHING;

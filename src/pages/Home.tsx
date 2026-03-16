@@ -125,9 +125,10 @@ export function HomePage() {
           <button
             type="button"
             onClick={() => navigate('/auth')}
-            className="font-mono text-xs text-muted/50 hover:text-accent transition-colors"
+            className="w-full flex items-center justify-between bg-surface/40 border border-border/40 rounded-xl px-4 py-3 hover:border-accent/30 transition-colors"
           >
-            Sign in to unlock more categories →
+            <span className="font-mono text-xs text-muted/50">+9 more categories</span>
+            <span className="font-mono text-xs text-accent">Sign in to unlock →</span>
           </button>
         </div>
       )}

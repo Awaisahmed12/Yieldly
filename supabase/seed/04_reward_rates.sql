@@ -2156,3 +2156,21 @@ INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, c
 SELECT c.id, 'rent', 1.00, 'multiplier', NULL, NULL, 'Via Bilt app on rent day (1st of month); no fee to pay rent'
 FROM card_ids c WHERE c.slug = 'bilt_mastercard'
 ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── FIDELITY REWARDS VISA ────────────────────────────────────────────────────
+-- 2% cash back on all purchases
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'other', 2.00, 'cashback', NULL, NULL, '2% cash back on all purchases'
+FROM card_ids c WHERE c.slug = 'fidelity_rewards_visa'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── WELLS FARGO SIGNIFY BUSINESS CASH ────────────────────────────────────────
+-- 2% cash back on all purchases
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'other', 2.00, 'cashback', NULL, NULL, '2% cash back on all purchases'
+FROM card_ids c WHERE c.slug = 'wells_fargo_signify_business_cash'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
