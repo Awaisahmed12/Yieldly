@@ -76,7 +76,13 @@ export function BottomSheet({ isOpen, onClose, children, title }: BottomSheetPro
     function reposition() {
       const vv = window.visualViewport!
       const offsetFromBottom = window.innerHeight - vv.height - vv.offsetTop
-      sheet!.style.bottom = offsetFromBottom > 0 ? `${offsetFromBottom}px` : ''
+      if (offsetFromBottom > 0) {
+        sheet!.style.bottom = `${offsetFromBottom}px`
+        sheet!.style.maxHeight = `${vv.height}px`
+      } else {
+        sheet!.style.bottom = ''
+        sheet!.style.maxHeight = ''
+      }
     }
 
     if (isOpen) {
@@ -88,7 +94,7 @@ export function BottomSheet({ isOpen, onClose, children, title }: BottomSheetPro
     return () => {
       window.visualViewport?.removeEventListener('resize', reposition)
       window.visualViewport?.removeEventListener('scroll', reposition)
-      if (sheet) sheet.style.bottom = ''
+      if (sheet) { sheet.style.bottom = ''; sheet.style.maxHeight = '' }
     }
   }, [isOpen])
 
@@ -137,7 +143,7 @@ export function BottomSheet({ isOpen, onClose, children, title }: BottomSheetPro
         )}
 
         {/* Content */}
-        <div className="overflow-y-auto flex-1 overscroll-contain">
+        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
           {children}
         </div>
       </div>

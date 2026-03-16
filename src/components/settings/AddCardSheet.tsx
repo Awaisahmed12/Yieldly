@@ -72,7 +72,7 @@ export function AddCardSheet({ isOpen, onClose, onAdd, banks, allCards, ownedCar
 
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose} title="Add Cards">
-      <div className="flex flex-col" style={{ maxHeight: '72vh' }}>
+      <div className="flex flex-col h-full">
         {/* Search */}
         <div className="px-5 pt-1 pb-3 flex-shrink-0">
           <input
