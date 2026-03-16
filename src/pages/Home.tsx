@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { Lock } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useCategories, type CategoryWithLock } from '../hooks/useCategories'
@@ -39,14 +39,6 @@ export function HomePage() {
   const categoryName = allCategories.find(c => c.slug === selectedSlug)?.display_name ?? ''
   const winnerBank = winner ? banks.find(b => b.id === winner.card.bank_id) ?? null : null
 
-  // Show "save across devices" nudge ~1.5s after guest customizes their cards
-  useEffect(() => {
-    if (!isGuest || !hasCustomizedCards) return
-    const alreadyDismissed = sessionStorage.getItem('save_nudge_dismissed')
-    if (alreadyDismissed) return
-    const timer = setTimeout(() => setActiveNudge('save'), 1500)
-    return () => clearTimeout(timer)
-  }, [isGuest, hasCustomizedCards])
 
   const openResult = useCallback((slug: string) => {
     setResultVisible(false)
@@ -60,16 +52,16 @@ export function HomePage() {
         }
       }, 50)
 
-      // Show personalization nudge after first result view for guests without customized cards
-      if (isGuest && !hasCustomizedCards) {
-        const alreadyShown = sessionStorage.getItem('result_viewed')
-        if (!alreadyShown) {
-          sessionStorage.setItem('result_viewed', '1')
+      // Show personalization nudge after 3rd result view for guests
+      if (isGuest) {
+        const count = parseInt(sessionStorage.getItem('result_view_count') ?? '0', 10) + 1
+        sessionStorage.setItem('result_view_count', String(count))
+        if (count === 3) {
           setTimeout(() => setActiveNudge('personalize'), 800)
         }
       }
     })
-  }, [isGuest, hasCustomizedCards])
+  }, [isGuest])
 
   function handleCategoryTap(slug: string) {
     if (slug === selectedSlug) {
@@ -106,9 +98,6 @@ export function HomePage() {
   }
 
   function handleNudgeDismiss() {
-    if (activeNudge === 'save') {
-      sessionStorage.setItem('save_nudge_dismissed', '1')
-    }
     setActiveNudge(null)
   }
 
