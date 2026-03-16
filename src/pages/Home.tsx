@@ -10,7 +10,6 @@ import { TopNav } from '../components/shared/TopNav'
 import { CategoryGrid } from '../components/home/CategoryGrid'
 import { SubpromptSheet } from '../components/home/SubpromptSheet'
 import { InstallBanner } from '../components/shared/InstallBanner'
-import { SaveCardsNudge } from '../components/shared/SaveCardsNudge'
 import { ResultCard } from '../components/result/ResultCard'
 import { RankedList } from '../components/result/RankedList'
 import { TiebreakerNote } from '../components/result/TiebreakerNote'
@@ -22,7 +21,7 @@ interface SubpromptState {
   parentLabel: string
 }
 
-type NudgeVariant = 'personalize' | 'save' | null
+type NudgeVariant = 'personalize' | null
 
 export function HomePage() {
   const navigate = useNavigate()
@@ -52,12 +51,13 @@ export function HomePage() {
         }
       }, 50)
 
-      // Show personalization nudge after 3rd result view for guests
-      if (isGuest) {
+      // Show personalization nudge after 3rd result view for guests (once per session)
+      if (isGuest && !sessionStorage.getItem('nudge_shown')) {
         const count = parseInt(sessionStorage.getItem('result_view_count') ?? '0', 10) + 1
         sessionStorage.setItem('result_view_count', String(count))
-        if (count === 3) {
-          setTimeout(() => setActiveNudge('personalize'), 800)
+        if (count >= 3) {
+          sessionStorage.setItem('nudge_shown', '1')
+          setActiveNudge('personalize')
         }
       }
     })
@@ -90,11 +90,7 @@ export function HomePage() {
 
   function handleNudgeConfirm() {
     setActiveNudge(null)
-    if (activeNudge === 'personalize') {
-      navigate('/onboarding')
-    } else {
-      navigate('/auth')
-    }
+    navigate('/onboarding')
   }
 
   function handleNudgeDismiss() {
@@ -175,6 +171,34 @@ export function HomePage() {
         </div>
       )}
 
+      {/* Personalize nudge — inline, appears after 3rd result view */}
+      {activeNudge === 'personalize' && (
+        <div className="mx-4 mt-6 bg-surface border border-accent/20 rounded-xl px-4 py-4">
+          <p className="font-mono text-[10px] text-accent uppercase tracking-[0.18em] mb-1">
+            Popular cards
+          </p>
+          <p className="font-serif text-sm text-text-primary leading-snug mb-3">
+            Have your own cards? Set up your wallet for personalized results.
+          </p>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleNudgeConfirm}
+              className="bg-accent text-bg font-mono text-xs font-medium py-2 px-4 rounded-lg hover:opacity-90 active:opacity-80 transition-opacity"
+            >
+              Personalize →
+            </button>
+            <button
+              type="button"
+              onClick={handleNudgeDismiss}
+              className="font-mono text-xs text-muted hover:text-text-primary transition-colors"
+            >
+              These look fine
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Tools */}
       <div className="mx-4 mt-8 mb-2">
         <p className="font-mono text-[10px] text-muted uppercase tracking-[0.2em] mb-3">Tools</p>
@@ -222,15 +246,6 @@ export function HomePage() {
       />
 
       <InstallBanner />
-
-      {/* Guest nudge bottom sheet */}
-      {activeNudge && (
-        <SaveCardsNudge
-          variant={activeNudge}
-          onConfirm={handleNudgeConfirm}
-          onDismiss={handleNudgeDismiss}
-        />
-      )}
     </div>
   )
 }
