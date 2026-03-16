@@ -1,5 +1,9 @@
 import type { CardUnlockRow, CategoryRow, RewardRateRow, SubpromptOption } from '../types/reward'
 
+export const GUEST_CATEGORY_SLUGS = [
+  'dining', 'groceries', 'gas', 'travel', 'streaming', 'online_shopping',
+]
+
 const BASE_CATEGORY_SLUGS = [
   'groceries', 'dining', 'gas', 'travel', 'flights', 'hotels',
   'streaming', 'pharmacy', 'entertainment', 'transit',

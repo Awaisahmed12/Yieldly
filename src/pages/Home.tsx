@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
+import { Lock } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { useCategories } from '../hooks/useCategories'
+import { useCategories, type CategoryWithLock } from '../hooks/useCategories'
 import { useRewardData } from '../hooks/useRewardData'
 import { useRewardLookup } from '../hooks/useRewardLookup'
 import { useUserStore } from '../store/userStore'
@@ -74,6 +75,11 @@ export function HomePage() {
     if (slug === selectedSlug) {
       setSelectedSlug(null)
       setResultVisible(false)
+      return
+    }
+    const cat = categories.find(c => c.slug === slug) as CategoryWithLock | undefined
+    if (cat?.locked) {
+      navigate('/auth')
       return
     }
     const options = getSubpromptOptions(slug, userCardIds, unlocks, allCategories)
@@ -183,24 +189,38 @@ export function HomePage() {
       {/* Tools */}
       <div className="mx-4 mt-8 mb-2">
         <p className="font-mono text-[10px] text-muted uppercase tracking-[0.2em] mb-3">Tools</p>
-        <div className="grid grid-cols-2 gap-2">
+        {isGuest ? (
           <button
             type="button"
-            onClick={() => navigate('/optimize')}
-            className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
+            onClick={() => navigate('/auth')}
+            className="w-full flex items-center justify-between bg-surface/40 border border-border/40 rounded-xl px-4 py-3 hover:border-accent/30 transition-colors"
           >
-            <span className="font-mono text-xs text-accent">Spending Mix</span>
-            <span className="font-mono text-[10px] text-muted leading-snug">Best card for your overall spend</span>
+            <div className="text-left">
+              <p className="font-mono text-xs text-muted/50">Spending Mix & Compare Cards</p>
+              <p className="font-mono text-[10px] text-muted/30 mt-0.5">Sign in to unlock</p>
+            </div>
+            <Lock size={14} className="text-muted/30 flex-shrink-0" />
           </button>
-          <button
-            type="button"
-            onClick={() => navigate('/compare')}
-            className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
-          >
-            <span className="font-mono text-xs text-accent">Compare Cards</span>
-            <span className="font-mono text-[10px] text-muted leading-snug">Side-by-side across categories</span>
-          </button>
-        </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => navigate('/optimize')}
+              className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
+            >
+              <span className="font-mono text-xs text-accent">Spending Mix</span>
+              <span className="font-mono text-[10px] text-muted leading-snug">Best card for your overall spend</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate('/compare')}
+              className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
+            >
+              <span className="font-mono text-xs text-accent">Compare Cards</span>
+              <span className="font-mono text-[10px] text-muted leading-snug">Side-by-side across categories</span>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Subprompt sheet */}

@@ -71,7 +71,7 @@ function AppRoutes() {
         }
       />
       <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
-      <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+      <Route path="/" element={<HomePage />} />
       <Route
         path="/settings"
         element={

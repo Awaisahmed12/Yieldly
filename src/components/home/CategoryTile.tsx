@@ -1,7 +1,7 @@
 import {
   ShoppingCart, UtensilsCrossed, Fuel, Globe, PlaneTakeoff, Hotel, Tv, Pill,
   Clapperboard, Train, ShoppingBag, Home, Warehouse, Package, Leaf, Car, Tag,
-  Apple, CreditCard, type LucideIcon,
+  Apple, CreditCard, Lock, type LucideIcon,
 } from 'lucide-react'
 import type { CategoryRow } from '../../types/reward'
 
@@ -56,11 +56,28 @@ interface CategoryTileProps {
   category: CategoryRow
   onClick: (slug: string) => void
   isSelected?: boolean
+  locked?: boolean
 }
 
-export function CategoryTile({ category, onClick, isSelected = false }: CategoryTileProps) {
+export function CategoryTile({ category, onClick, isSelected = false, locked = false }: CategoryTileProps) {
   const IconComponent = ICON_MAP[category.icon_name] ?? ICON_MAP[category.slug] ?? CreditCard
   const subtitle = SUBTITLES[category.slug]
+
+  if (locked) {
+    return (
+      <button
+        type="button"
+        onClick={() => onClick(category.slug)}
+        className="aspect-square flex flex-col items-center justify-center gap-1.5 rounded-xl border border-border/40 bg-surface/40 transition-all duration-150 active:scale-95 hover:border-accent/20 hover:bg-surface/60"
+      >
+        <IconComponent size={20} strokeWidth={1.5} className="text-muted/30" />
+        <span className="font-mono text-xs text-center leading-snug px-1 line-clamp-2 text-muted/30">
+          {category.display_name}
+        </span>
+        <Lock size={10} strokeWidth={2} className="text-muted/40" />
+      </button>
+    )
+  }
 
   return (
     <button

@@ -1,8 +1,8 @@
 import { CategoryTile } from './CategoryTile'
-import type { CategoryRow } from '../../types/reward'
+import type { CategoryWithLock } from '../../hooks/useCategories'
 
 interface CategoryGridProps {
-  categories: CategoryRow[]
+  categories: CategoryWithLock[]
   onSelect: (slug: string) => void
   loading?: boolean
   selectedSlug?: string | null
@@ -42,6 +42,7 @@ export function CategoryGrid({ categories, onSelect, loading = false, selectedSl
           category={category}
           onClick={onSelect}
           isSelected={category.slug === selectedSlug}
+          locked={category.locked}
         />
       ))}
     </div>
