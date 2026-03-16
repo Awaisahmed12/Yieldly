@@ -59,7 +59,7 @@ export function AuthPage() {
     <div className="min-h-dvh bg-bg flex flex-col items-center justify-center px-5 py-12 max-w-[480px] mx-auto" style={{ paddingTop: 'calc(3rem + env(safe-area-inset-top))' }}>
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <p className="text-accent font-mono text-sm tracking-widest uppercase mb-3">Yield</p>
+          <p className="text-accent font-mono text-sm tracking-widest uppercase mb-3">Yieldly</p>
           <h1 className="font-serif text-3xl font-semibold text-text-primary leading-tight">
             {step === 'input' ? 'Sign in or create account' : 'Enter your code'}
           </h1>

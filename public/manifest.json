@@ -1,6 +1,6 @@
 {
-  "name": "Yield",
-  "short_name": "Yield",
+  "name": "Yieldly",
+  "short_name": "Yieldly",
   "description": "Instantly find which credit card maximizes rewards at any merchant.",
   "start_url": "/",
   "display": "standalone",

@@ -20,8 +20,8 @@ export function TermsText() {
       {expanded && (
         <div className="mt-3 text-left text-xs text-muted leading-relaxed border border-border rounded-lg p-3 bg-surface space-y-2">
           <p>
-            <strong className="text-text-primary">About Yield</strong><br />
-            Yield helps you track which credit card to use for maximum rewards. It is a personal
+            <strong className="text-text-primary">About Yieldly</strong><br />
+            Yieldly helps you track which credit card to use for maximum rewards. It is a personal
             finance tool intended for individual, non-commercial use only.
           </p>
           <p>

@@ -197,7 +197,7 @@ export function SettingsPage() {
 
         {/* App version / info */}
         <p className="font-mono text-xs text-muted/40 text-center mt-6">
-          Yield · Rewards Optimizer
+          Yieldly · Rewards Optimizer
         </p>
       </div>
 

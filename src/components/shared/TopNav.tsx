@@ -39,7 +39,7 @@ export function TopNav({ showBack = false, showSettings = false, title }: TopNav
           </button>
         ) : (
           <span className="font-mono text-accent text-sm font-medium tracking-widest">
-            {title ?? 'Yield'}
+            {title ?? 'Yieldly'}
           </span>
         )}
       </div>

@@ -771,7 +771,7 @@ export function AdminPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <p className="font-mono text-xs text-accent uppercase tracking-widest mb-1">Yield Admin</p>
+            <p className="font-mono text-xs text-accent uppercase tracking-widest mb-1">Yieldly Admin</p>
             <h1 className="font-serif text-2xl font-semibold text-text-primary">Data Console</h1>
           </div>
           <div className="flex items-center gap-2">

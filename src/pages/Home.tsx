@@ -64,7 +64,7 @@ export function HomePage() {
 
   return (
     <div className="bg-bg max-w-[480px] mx-auto min-h-dvh pb-24">
-      <TopNav showSettings title="Yield" />
+      <TopNav showSettings title="Yieldly" />
 
       {/* Header */}
       <div className="px-4 pt-5 pb-4">
