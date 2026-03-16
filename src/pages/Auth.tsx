@@ -4,13 +4,23 @@ import { OtpInput } from '../components/auth/OtpInput'
 import { TermsText } from '../components/auth/TermsText'
 
 type AuthStep = 'input' | 'otp'
+type AuthMode = 'email' | 'phone'
+
+function formatPhone(raw: string): string {
+  const digits = raw.replace(/\D/g, '')
+  return digits.startsWith('1') ? `+${digits}` : `+1${digits}`
+}
 
 export function AuthPage() {
   const [step, setStep] = useState<AuthStep>('input')
+  const [mode, setMode] = useState<AuthMode>('phone')
   const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [otp, setOtp] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const identifier = mode === 'email' ? email.trim() : formatPhone(phone)
 
   async function handleSendOtp(e: FormEvent) {
     e.preventDefault()
@@ -18,10 +28,15 @@ export function AuthPage() {
     setLoading(true)
 
     try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email: email.trim(),
-        options: { shouldCreateUser: true },
-      })
+      const { error } = mode === 'email'
+        ? await supabase.auth.signInWithOtp({
+            email: identifier,
+            options: { shouldCreateUser: true },
+          })
+        : await supabase.auth.signInWithOtp({
+            phone: identifier,
+            options: { shouldCreateUser: true },
+          })
       if (error) throw error
       setStep('otp')
     } catch (err) {
@@ -36,13 +51,10 @@ export function AuthPage() {
     setLoading(true)
 
     try {
-      const { error } = await supabase.auth.verifyOtp({
-        email: email.trim(),
-        token,
-        type: 'email',
-      })
+      const { error } = mode === 'email'
+        ? await supabase.auth.verifyOtp({ email: identifier, token, type: 'email' })
+        : await supabase.auth.verifyOtp({ phone: identifier, token, type: 'sms' })
       if (error) throw error
-      // Auth state change listener in useAuth will handle redirect
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Invalid code. Please try again.')
       setOtp('')
@@ -55,6 +67,13 @@ export function AuthPage() {
     if (value.length === 6) handleVerifyOtp(value)
   }
 
+  function switchMode(next: AuthMode) {
+    setMode(next)
+    setError(null)
+  }
+
+  const displayIdentifier = mode === 'email' ? identifier : identifier.replace('+1', '')
+
   return (
     <div className="min-h-dvh bg-bg flex flex-col items-center justify-center px-5 py-12 max-w-[480px] mx-auto" style={{ paddingTop: 'calc(3rem + env(safe-area-inset-top))' }}>
       <div className="w-full max-w-sm">
@@ -66,27 +85,73 @@ export function AuthPage() {
           {step === 'otp' && (
             <p className="text-muted text-sm mt-2 font-mono">
               We sent a 6-digit code to{' '}
-              <span className="text-text-primary">{email}</span>
+              <span className="text-text-primary">{displayIdentifier}</span>
             </p>
           )}
         </div>
 
         {step === 'input' && (
           <form onSubmit={handleSendOtp} className="space-y-4">
-            <div>
-              <label className="block text-xs text-muted font-mono mb-1.5 uppercase tracking-wide">
-                Email address
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                required
-                autoFocus
-                className="w-full bg-surface border border-border rounded-lg px-4 py-3 text-text-primary placeholder-muted font-mono text-base focus:outline-none focus:border-accent transition-colors"
-              />
+            {/* Toggle */}
+            <div className="flex bg-surface border border-border rounded-lg p-1 gap-1">
+              <button
+                type="button"
+                onClick={() => switchMode('email')}
+                className={`flex-1 py-2 rounded-md font-mono text-xs transition-colors ${
+                  mode === 'email'
+                    ? 'bg-accent text-bg'
+                    : 'text-muted hover:text-text-primary'
+                }`}
+              >
+                Email
+              </button>
+              <button
+                type="button"
+                onClick={() => switchMode('phone')}
+                className={`flex-1 py-2 rounded-md font-mono text-xs transition-colors ${
+                  mode === 'phone'
+                    ? 'bg-accent text-bg'
+                    : 'text-muted hover:text-text-primary'
+                }`}
+              >
+                Phone
+              </button>
             </div>
+
+            {mode === 'email' ? (
+              <div>
+                <label className="block text-xs text-muted font-mono mb-1.5 uppercase tracking-wide">
+                  Email address
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  required
+                  autoFocus
+                  className="w-full bg-surface border border-border rounded-lg px-4 py-3 text-text-primary placeholder-muted font-mono text-base focus:outline-none focus:border-accent transition-colors"
+                />
+              </div>
+            ) : (
+              <div>
+                <label className="block text-xs text-muted font-mono mb-1.5 uppercase tracking-wide">
+                  Phone number
+                </label>
+                <div className="flex items-center bg-surface border border-border rounded-lg px-4 py-3 focus-within:border-accent transition-colors">
+                  <span className="text-muted font-mono text-base mr-2">+1</span>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                    placeholder="(555) 000-0000"
+                    required
+                    autoFocus
+                    className="flex-1 bg-transparent text-text-primary placeholder-muted font-mono text-base focus:outline-none"
+                  />
+                </div>
+              </div>
+            )}
 
             {error && (
               <p className="text-red-400 text-sm font-mono text-center">{error}</p>
@@ -94,7 +159,7 @@ export function AuthPage() {
 
             <button
               type="submit"
-              disabled={loading || !email}
+              disabled={loading || (mode === 'email' ? !email : phone.replace(/\D/g, '').length < 10)}
               className="w-full bg-accent text-bg font-mono font-medium py-3 px-4 rounded-lg text-sm transition-opacity disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 active:opacity-80"
             >
               {loading ? 'Sending...' : 'Send code'}
@@ -131,7 +196,7 @@ export function AuthPage() {
                 disabled={loading}
                 className="text-muted text-sm font-mono hover:text-text-primary transition-colors"
               >
-                ← Change email
+                ← Change {mode === 'email' ? 'email' : 'number'}
               </button>
             </div>
           </div>
