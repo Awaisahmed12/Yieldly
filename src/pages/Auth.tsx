@@ -12,6 +12,12 @@ function formatPhone(raw: string): string {
   return digits.startsWith('1') ? `+${digits}` : `+1${digits}`
 }
 
+function formatDisplayPhone(digits: string): string {
+  if (digits.length <= 3) return digits
+  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`
+}
+
 export function AuthPage() {
   const navigate = useNavigate()
   const [step, setStep] = useState<AuthStep>('input')
@@ -144,8 +150,11 @@ export function AuthPage() {
                   <span className="text-muted font-mono text-base mr-2">+1</span>
                   <input
                     type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                    value={formatDisplayPhone(phone)}
+                    onChange={(e) => {
+                      const digits = e.target.value.replace(/\D/g, '').slice(0, 10)
+                      setPhone(digits)
+                    }}
                     placeholder="(555) 000-0000"
                     required
                     autoFocus
