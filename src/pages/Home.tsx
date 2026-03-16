@@ -218,19 +218,19 @@ export function HomePage() {
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
-              onClick={() => navigate('/optimize')}
-              className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
-            >
-              <span className="font-mono text-xs text-accent">Spending Mix</span>
-              <span className="font-mono text-[10px] text-muted leading-snug">Best card for your overall spend</span>
-            </button>
-            <button
-              type="button"
               onClick={() => navigate('/compare')}
               className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
             >
               <span className="font-mono text-xs text-accent">Compare Cards</span>
               <span className="font-mono text-[10px] text-muted leading-snug">Side-by-side across categories</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate('/optimize')}
+              className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
+            >
+              <span className="font-mono text-xs text-accent">Spending Mix</span>
+              <span className="font-mono text-[10px] text-muted leading-snug">Best card for your overall spend</span>
             </button>
           </div>
         )}

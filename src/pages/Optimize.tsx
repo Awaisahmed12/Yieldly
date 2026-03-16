@@ -3,6 +3,7 @@ import { useUserStore } from '../store/userStore'
 import { useRewardData } from '../hooks/useRewardData'
 import { rankCardsForCategory } from '../lib/rewards'
 import { TopNav } from '../components/shared/TopNav'
+import type { CardRow } from '../types/reward'
 
 const SLIDER_CATEGORIES: { slug: string; label: string; defaultAmount: number }[] = [
   { slug: 'dining',          label: 'Dining',          defaultAmount: 0 },
@@ -28,9 +29,11 @@ function formatDollars(n: number) {
 }
 
 export function OptimizePage() {
-  const { userCards, prefs } = useUserStore()
-  const { rates } = useRewardData()
+  const { userCardIds, prefs } = useUserStore()
+  const { cards: allCards, rates } = useRewardData()
   const cppMode = prefs?.cpp_mode ?? 'default'
+
+  const userCardIdSet = useMemo(() => new Set(userCardIds), [userCardIds])
 
   const [spend, setSpend] = useState<Record<string, number>>(
     Object.fromEntries(SLIDER_CATEGORIES.map(c => [c.slug, c.defaultAmount]))
@@ -39,9 +42,9 @@ export function OptimizePage() {
   const totalMonthly = Object.values(spend).reduce((a, b) => a + b, 0)
 
   const cardResults = useMemo(() => {
-    if (!userCards.length) return []
+    if (!allCards.length) return []
 
-    return userCards.map(card => {
+    return allCards.map((card: CardRow) => {
       let totalAnnualRewards = 0
 
       for (const cat of SLIDER_CATEGORIES) {
@@ -60,9 +63,10 @@ export function OptimizePage() {
         totalAnnualRewards,
         net,
         annualFee: card.annual_fee,
+        inWallet: userCardIdSet.has(card.id),
       }
     }).sort((a, b) => b.net - a.net)
-  }, [userCards, spend, rates, cppMode])
+  }, [allCards, spend, rates, cppMode, userCardIdSet])
 
   // Best category per card (for top card)
   const topCard = cardResults[0]
@@ -71,10 +75,10 @@ export function OptimizePage() {
     return SLIDER_CATEGORIES.filter(cat => {
       const monthly = spend[cat.slug] ?? 0
       if (monthly === 0) return false
-      const ranked = rankCardsForCategory(userCards, cat.slug, rates, cppMode)
+      const ranked = rankCardsForCategory(allCards, cat.slug, rates, cppMode)
       return ranked[0]?.card.id === topCard.card.id
     }).map(c => c.label)
-  }, [topCard, spend, userCards, rates, cppMode])
+  }, [topCard, spend, allCards, rates, cppMode])
 
   return (
     <div className="min-h-dvh bg-bg flex flex-col max-w-[480px] mx-auto">
@@ -125,10 +129,10 @@ export function OptimizePage() {
         )}
 
         {/* Results */}
-        {totalMonthly > 0 && userCards.length > 0 && (
+        {totalMonthly > 0 && cardResults.length > 0 && (
           <div className="mx-4 mt-4">
             <h2 className="font-mono text-xs text-muted uppercase tracking-widest mb-3">
-              Best card for your wallet
+              Best card for this spend mix
             </h2>
             <div className="bg-surface border border-border rounded-xl overflow-hidden">
               {cardResults.map((item, i) => (
@@ -143,9 +147,16 @@ export function OptimizePage() {
                     }
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className={`font-mono text-sm ${i === 0 ? 'text-text-primary' : 'text-muted'}`}>
-                      {item.card.display_name}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className={`font-mono text-sm ${i === 0 ? 'text-text-primary' : 'text-muted'}`}>
+                        {item.card.display_name}
+                      </p>
+                      {item.inWallet && (
+                        <span className="font-mono text-[9px] text-accent/70 border border-accent/30 rounded px-1 py-px leading-none">
+                          yours
+                        </span>
+                      )}
+                    </div>
                     {i === 0 && topCardCategoryWins.length > 0 && (
                       <p className="font-mono text-xs text-muted/60 mt-0.5 leading-snug">
                         Wins: {topCardCategoryWins.join(', ')}
@@ -171,14 +182,8 @@ export function OptimizePage() {
               ))}
             </div>
             <p className="font-mono text-xs text-muted/40 mt-2 px-1">
-              Net annual value = estimated rewards earned minus annual fee
+              Net annual value = estimated rewards minus annual fee
             </p>
-          </div>
-        )}
-
-        {totalMonthly > 0 && userCards.length === 0 && (
-          <div className="mx-4 mt-4 px-4 py-6 bg-surface border border-border rounded-xl text-center">
-            <p className="font-mono text-sm text-muted">Add cards to see your results</p>
           </div>
         )}
 
