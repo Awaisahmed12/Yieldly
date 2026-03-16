@@ -158,6 +158,32 @@ export function HomePage() {
             <>
               <ResultCard result={winner} bank={winnerBank} />
               {tie && <TiebreakerNote tie={tie} />}
+              {activeNudge === 'personalize' && (
+                <div className="mx-4 mt-4 mb-1 bg-surface border border-accent/20 rounded-xl px-4 py-4">
+                  <p className="font-mono text-[10px] text-accent uppercase tracking-[0.18em] mb-1">
+                    Popular cards
+                  </p>
+                  <p className="font-serif text-sm text-text-primary leading-snug mb-3">
+                    Have your own cards? Set up your wallet for personalized results.
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={handleNudgeConfirm}
+                      className="bg-accent text-bg font-mono text-xs font-medium py-2 px-4 rounded-lg hover:opacity-90 active:opacity-80 transition-opacity"
+                    >
+                      Personalize →
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleNudgeDismiss}
+                      className="font-mono text-xs text-muted hover:text-text-primary transition-colors"
+                    >
+                      These look fine
+                    </button>
+                  </div>
+                </div>
+              )}
               <RankedList results={ranked} isForeignSpending={selectedSlug === 'foreign_spending'} />
             </>
           ) : (
@@ -168,34 +194,6 @@ export function HomePage() {
               </p>
             </div>
           )}
-        </div>
-      )}
-
-      {/* Personalize nudge — inline, appears after 3rd result view */}
-      {activeNudge === 'personalize' && (
-        <div className="mx-4 mt-6 bg-surface border border-accent/20 rounded-xl px-4 py-4">
-          <p className="font-mono text-[10px] text-accent uppercase tracking-[0.18em] mb-1">
-            Popular cards
-          </p>
-          <p className="font-serif text-sm text-text-primary leading-snug mb-3">
-            Have your own cards? Set up your wallet for personalized results.
-          </p>
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={handleNudgeConfirm}
-              className="bg-accent text-bg font-mono text-xs font-medium py-2 px-4 rounded-lg hover:opacity-90 active:opacity-80 transition-opacity"
-            >
-              Personalize →
-            </button>
-            <button
-              type="button"
-              onClick={handleNudgeDismiss}
-              className="font-mono text-xs text-muted hover:text-text-primary transition-colors"
-            >
-              These look fine
-            </button>
-          </div>
         </div>
       )}
 
