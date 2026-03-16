@@ -27,7 +27,7 @@ export function HomePage() {
   const navigate = useNavigate()
   const { categories, loading } = useCategories()
   const { unlocks, categories: allCategories, banks } = useRewardData()
-  const { userCardIds, isGuest, hasCustomizedCards } = useUserStore()
+  const { userCardIds, isGuest } = useUserStore()
   const [subprompt, setSubprompt] = useState<SubpromptState | null>(null)
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
   const [resultVisible, setResultVisible] = useState(false)
@@ -103,38 +103,34 @@ export function HomePage() {
 
       {/* Header */}
       <div className="px-4 pt-5 pb-4">
-        <p className="font-mono text-[10px] text-muted uppercase tracking-[0.2em] mb-1">
-        </p>
         <h1 className="font-serif text-2xl font-semibold text-text-primary leading-snug">
           Select a Category
         </h1>
+        <p className="font-mono text-xs text-muted mt-1">
+          Tap a category to see which card earns you the most.
+        </p>
       </div>
-
-      {/* Popular cards banner for guests who haven't customized */}
-      {isGuest && !hasCustomizedCards && (
-        <div className="mx-4 mb-4">
-          <button
-            type="button"
-            onClick={() => navigate('/onboarding')}
-            className="w-full flex items-center justify-between bg-surface border border-border rounded-lg px-4 py-3 text-left hover:border-accent/50 transition-colors"
-          >
-            <span className="font-mono text-xs text-muted">
-              Using popular cards
-            </span>
-            <span className="font-mono text-xs text-accent">
-              Personalize your wallet →
-            </span>
-          </button>
-        </div>
-      )}
 
       {/* Category grid */}
       <CategoryGrid
-        categories={categories}
+        categories={categories.filter(c => !c.locked)}
         onSelect={handleCategoryTap}
         loading={loading}
         selectedSlug={selectedSlug}
       />
+
+      {/* Unlock prompt for guests */}
+      {isGuest && !loading && (
+        <div className="px-4 mt-3">
+          <button
+            type="button"
+            onClick={() => navigate('/auth')}
+            className="font-mono text-xs text-muted/50 hover:text-accent transition-colors"
+          >
+            Sign in to unlock more categories →
+          </button>
+        </div>
+      )}
 
       {/* Inline result — slides in below grid, no overlay */}
       {selectedSlug && (
