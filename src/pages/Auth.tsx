@@ -100,31 +100,6 @@ export function AuthPage() {
 
         {step === 'input' && (
           <form onSubmit={handleSendOtp} className="space-y-4">
-            {/* Toggle */}
-            <div className="flex bg-surface border border-border rounded-lg p-1 gap-1">
-              <button
-                type="button"
-                onClick={() => switchMode('phone')}
-                className={`flex-1 py-2 rounded-md font-mono text-xs transition-colors ${
-                  mode === 'phone'
-                    ? 'bg-accent text-bg'
-                    : 'text-muted hover:text-text-primary'
-                }`}
-              >
-                Phone
-              </button>
-              <button
-                type="button"
-                onClick={() => switchMode('email')}
-                className={`flex-1 py-2 rounded-md font-mono text-xs transition-colors ${
-                  mode === 'email'
-                    ? 'bg-accent text-bg'
-                    : 'text-muted hover:text-text-primary'
-                }`}
-              >
-                Email
-              </button>
-            </div>
 
             {mode === 'email' ? (
               <div>
