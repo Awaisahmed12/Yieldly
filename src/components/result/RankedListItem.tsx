@@ -78,7 +78,10 @@ export function RankedListItem({ result, isWinner, isForeignSpending = false }: 
               ? 'text-accent'
               : 'text-muted'
         }`}>
-          {formatRateShort(result)}
+          {isForeignSpending
+            ? `${result.estimatedPct > 0 ? '+' : ''}${result.estimatedPct}%`
+            : formatRateShort(result)
+          }
         </span>
       </div>
     </div>
