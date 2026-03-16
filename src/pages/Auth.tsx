@@ -21,7 +21,7 @@ function formatDisplayPhone(digits: string): string {
 export function AuthPage() {
   const navigate = useNavigate()
   const [step, setStep] = useState<AuthStep>('input')
-  const [mode, setMode] = useState<AuthMode>('phone')
+  const [mode, setMode] = useState<AuthMode>('email')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [otp, setOtp] = useState('')
