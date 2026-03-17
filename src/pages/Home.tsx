@@ -8,8 +8,10 @@ import { useUserStore } from '../store/userStore'
 import { getSubpromptOptions } from '../lib/categories'
 import { TopNav } from '../components/shared/TopNav'
 import { CategoryGrid } from '../components/home/CategoryGrid'
+import { GuestHero } from '../components/home/GuestHero'
 import { SubpromptSheet } from '../components/home/SubpromptSheet'
 import { InstallBanner } from '../components/shared/InstallBanner'
+import { useIntroSeen } from '../hooks/useIntroSeen'
 import { ResultCard } from '../components/result/ResultCard'
 import { RankedList } from '../components/result/RankedList'
 import { TiebreakerNote } from '../components/result/TiebreakerNote'
@@ -28,6 +30,7 @@ export function HomePage() {
   const { categories, loading } = useCategories()
   const { unlocks, categories: allCategories, banks } = useRewardData()
   const { userCardIds, isGuest } = useUserStore()
+  const { seen: introSeen, markSeen: markIntroSeen } = useIntroSeen()
   const [subprompt, setSubprompt] = useState<SubpromptState | null>(null)
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
   const [resultVisible, setResultVisible] = useState(false)
@@ -40,6 +43,7 @@ export function HomePage() {
 
 
   const openResult = useCallback((slug: string) => {
+    markIntroSeen()
     setResultVisible(false)
     setSelectedSlug(slug)
     requestAnimationFrame(() => {
@@ -61,7 +65,7 @@ export function HomePage() {
         }
       }
     })
-  }, [isGuest])
+  }, [isGuest, markIntroSeen])
 
   function handleCategoryTap(slug: string) {
     if (slug === selectedSlug) {
@@ -110,6 +114,14 @@ export function HomePage() {
           Tap a category to see which card earns you the most.
         </p>
       </div>
+
+      {isGuest && (
+        <GuestHero
+          visible={!introSeen}
+          onDismiss={markIntroSeen}
+          onGetStarted={() => navigate('/auth')}
+        />
+      )}
 
       {/* Category grid */}
       <CategoryGrid
