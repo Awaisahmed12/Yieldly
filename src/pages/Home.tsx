@@ -231,6 +231,11 @@ export function HomePage() {
         )}
       </div>
 
+      {/* Disclaimer */}
+      <p className="font-mono text-[10px] text-muted/30 text-center px-6 mt-8 mb-2 leading-relaxed">
+        Reward rates are estimates based on publicly available information and may not reflect current issuer terms. Verify rates with your card issuer before making financial decisions.
+      </p>
+
       {/* Subprompt sheet */}
       <SubpromptSheet
         isOpen={subprompt !== null}
