@@ -100,8 +100,8 @@ function AppRoutes() {
         }
       />
       <Route path="/admin" element={<AdminPage />} />
-      <Route path="/optimize" element={<ProtectedRoute><OptimizePage /></ProtectedRoute>} />
-      <Route path="/compare" element={<ProtectedRoute><ComparePage /></ProtectedRoute>} />
+      <Route path="/optimize" element={<OptimizePage />} />
+      <Route path="/compare" element={<ComparePage />} />
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

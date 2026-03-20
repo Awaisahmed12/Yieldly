@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react'
-import { Lock, Search, X } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useCategories, type CategoryWithLock } from '../hooks/useCategories'
 import { useRewardData } from '../hooks/useRewardData'
@@ -264,38 +264,24 @@ export function HomePage() {
       {/* Tools */}
       <div className="mx-4 mt-8 mb-2">
         <p className="font-mono text-[10px] text-muted uppercase tracking-[0.2em] mb-3">Tools</p>
-        {isGuest ? (
+        <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
-            onClick={() => navigate('/onboarding')}
-            className="w-full flex items-center justify-between bg-surface/40 border border-border/40 rounded-xl px-4 py-3 hover:border-accent/30 transition-colors"
+            onClick={() => navigate('/compare')}
+            className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
           >
-            <div className="text-left">
-              <p className="font-mono text-xs text-muted/50">Spending Mix & Compare Cards</p>
-              <p className="font-mono text-[10px] text-muted/30 mt-0.5">Set up your wallet to unlock</p>
-            </div>
-            <Lock size={14} className="text-muted/30 flex-shrink-0" />
+            <span className="font-mono text-xs text-accent">Compare Cards</span>
+            <span className="font-mono text-[10px] text-muted leading-snug">Side-by-side across categories</span>
           </button>
-        ) : (
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => navigate('/compare')}
-              className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
-            >
-              <span className="font-mono text-xs text-accent">Compare Cards</span>
-              <span className="font-mono text-[10px] text-muted leading-snug">Side-by-side across categories</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate('/optimize')}
-              className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
-            >
-              <span className="font-mono text-xs text-accent">Spending Mix</span>
-              <span className="font-mono text-[10px] text-muted leading-snug">Best card for your overall spend</span>
-            </button>
-          </div>
-        )}
+          <button
+            type="button"
+            onClick={() => navigate('/optimize')}
+            className="flex flex-col gap-1 bg-surface border border-border rounded-xl px-3 py-3 text-left hover:border-accent/40 transition-colors"
+          >
+            <span className="font-mono text-xs text-accent">Spending Mix</span>
+            <span className="font-mono text-[10px] text-muted leading-snug">Best card for your overall spend</span>
+          </button>
+        </div>
       </div>
 
       {/* Disclaimer */}
