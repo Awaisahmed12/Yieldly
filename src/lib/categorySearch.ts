@@ -156,6 +156,38 @@ const KEYWORD_MAP: KeywordEntry[] = [
       'tattoo', 'piercing', 'grooming',
     ],
   },
+  // Utilities — electric, gas, water, internet, phone bills
+  {
+    slug: 'utilities',
+    terms: [
+      'utilities', 'utility', 'electric', 'electricity', 'power bill', 'energy',
+      'water', 'water bill', 'gas bill', 'natural gas', 'sewage', 'trash',
+      'internet', 'wifi', 'broadband', 'cable', 'cable bill', 'at&t', 'att',
+      'verizon', 'comcast', 'xfinity', 'spectrum', 'cox', 'tmobile', 't-mobile',
+      'cell phone', 'cell bill', 'phone bill', 'telecom', 'bg&e', 'pge', 'pg&e',
+      'con ed', 'coned',
+    ],
+  },
+  // Fitness — gyms, classes, equipment
+  {
+    slug: 'fitness',
+    terms: [
+      'fitness', 'gym', 'workout', 'exercise', 'health club', 'crossfit',
+      'yoga', 'pilates', 'spin', 'cycling class', 'peloton', 'classpass',
+      'equinox', 'planet fitness', '24 hour fitness', 'la fitness', 'anytime fitness',
+      'crunch', 'blink fitness', 'orange theory', 'orangetheory', 'f45',
+      'personal trainer', 'swimming', 'swim', 'tennis', 'golf',
+    ],
+  },
+  // EV Charging
+  {
+    slug: 'ev_charging',
+    terms: [
+      'ev', 'ev charging', 'electric vehicle', 'charging', 'charge',
+      'tesla', 'supercharger', 'tesla supercharger', 'chargepoint', 'electrify america',
+      'blink charging', 'evgo', 'plugshare', 'level 2', 'dc fast charge',
+    ],
+  },
   // Foreign Spending
   {
     slug: 'foreign_spending',

@@ -19,6 +19,9 @@ INSERT INTO categories (slug, display_name, icon_name, is_brand, parent_slug, so
   ('wholesale_clubs', 'Wholesale Clubs', 'Warehouse',          false, NULL, 13),
   ('car_rental',      'Car Rental',      'Car',                false, NULL, 14),
   ('beauty',          'Beauty',          'Scissors',           false, NULL, 15),
+  ('utilities',       'Utilities',       'Zap',                false, NULL, 16),
+  ('fitness',         'Fitness',         'Dumbbell',           false, NULL, 17),
+  ('ev_charging',     'EV Charging',     'BatteryCharging',    false, NULL, 18),
   ('other',           'Other',           'Tag',                false, NULL, 99)
 ON CONFLICT (slug) DO NOTHING;
 
