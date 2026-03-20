@@ -97,7 +97,7 @@ export function HomePage() {
     }
     const cat = categories.find(c => c.slug === slug) as CategoryWithLock | undefined
     if (cat?.locked) {
-      navigate('/auth')
+      navigate('/onboarding')
       return
     }
     const options = getSubpromptOptions(slug, userCardIds, unlocks, allCategories)
@@ -191,11 +191,11 @@ export function HomePage() {
         <div className="px-4 mt-3">
           <button
             type="button"
-            onClick={() => navigate('/auth')}
+            onClick={() => navigate('/onboarding')}
             className="w-full flex items-center justify-between bg-surface/40 border border-border/40 rounded-xl px-4 py-3 hover:border-accent/30 transition-colors"
           >
             <span className="font-mono text-xs text-muted/50">+9 more categories</span>
-            <span className="font-mono text-xs text-accent">Sign in to unlock →</span>
+            <span className="font-mono text-xs text-accent">Set up your wallet →</span>
           </button>
         </div>
       )}
@@ -267,12 +267,12 @@ export function HomePage() {
         {isGuest ? (
           <button
             type="button"
-            onClick={() => navigate('/auth')}
+            onClick={() => navigate('/onboarding')}
             className="w-full flex items-center justify-between bg-surface/40 border border-border/40 rounded-xl px-4 py-3 hover:border-accent/30 transition-colors"
           >
             <div className="text-left">
               <p className="font-mono text-xs text-muted/50">Spending Mix & Compare Cards</p>
-              <p className="font-mono text-[10px] text-muted/30 mt-0.5">Sign in to unlock</p>
+              <p className="font-mono text-[10px] text-muted/30 mt-0.5">Set up your wallet to unlock</p>
             </div>
             <Lock size={14} className="text-muted/30 flex-shrink-0" />
           </button>
