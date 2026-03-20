@@ -164,7 +164,7 @@ export function HomePage() {
         <GuestHero
           visible={!introSeen}
           onDismiss={markIntroSeen}
-          onGetStarted={() => navigate('/auth')}
+          onGetStarted={() => navigate('/onboarding')}
         />
       )}
 

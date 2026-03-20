@@ -56,6 +56,25 @@ function AuthRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
 
+function OnboardingRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading, prefs } = useUserStore()
+
+  if (loading) {
+    return (
+      <div className="min-h-dvh bg-bg flex items-center justify-center">
+        <div className="text-muted font-mono text-sm animate-pulse">Loading...</div>
+      </div>
+    )
+  }
+
+  // Fully onboarded users don't need to see this again
+  if (user && prefs?.onboarding_complete) {
+    return <Navigate to="/" replace />
+  }
+
+  return <>{children}</>
+}
+
 function AppRoutes() {
   useAuth()
   useGuestCardSync()
@@ -70,7 +89,7 @@ function AppRoutes() {
           </AuthRoute>
         }
       />
-      <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
+      <Route path="/onboarding" element={<OnboardingRoute><OnboardingPage /></OnboardingRoute>} />
       <Route path="/" element={<HomePage />} />
       <Route
         path="/settings"
