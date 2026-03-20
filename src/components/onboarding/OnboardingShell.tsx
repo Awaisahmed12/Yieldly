@@ -16,11 +16,12 @@ const CO_BRANDED_DISPLAY: Record<string, string> = {
 interface OnboardingShellProps {
   banks: BankRow[]
   cards: CardRow[]
+  initialSelectedIds?: string[]
   onComplete: (selectedCardIds: string[]) => void
 }
 
-export function OnboardingShell({ banks, cards, onComplete }: OnboardingShellProps) {
-  const [selectedCardIds, setSelectedCardIds] = useState<string[]>([])
+export function OnboardingShell({ banks, cards, initialSelectedIds = [], onComplete }: OnboardingShellProps) {
+  const [selectedCardIds, setSelectedCardIds] = useState<string[]>(initialSelectedIds)
   const [search, setSearch] = useState('')
 
   function handleToggle(cardId: string) {

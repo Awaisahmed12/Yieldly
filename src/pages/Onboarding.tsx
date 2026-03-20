@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useUserStore } from '../store/userStore'
 import { useRewardData } from '../hooks/useRewardData'
-import { setGuestCardSlugs } from '../lib/guestStorage'
+import { getGuestCardSlugs, setGuestCardSlugs } from '../lib/guestStorage'
 import { OnboardingShell } from '../components/onboarding/OnboardingShell'
 import { LoadingSpinner } from '../components/shared/LoadingSpinner'
 import { TermsText } from '../components/auth/TermsText'
@@ -15,8 +15,13 @@ export function OnboardingPage() {
   const navigate = useNavigate()
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
-  const { user, setPrefs, setUserCards, setGuestCards } = useUserStore()
+  const { user, userCardIds, setPrefs, setUserCards, setGuestCards } = useUserStore()
   const { banks, cards, loading } = useRewardData()
+
+  // Pre-populate selections: authed users get their existing cards, guests get localStorage
+  const initialSelectedIds = user
+    ? userCardIds
+    : cards.filter(c => getGuestCardSlugs().includes(c.slug)).map(c => c.id)
 
   const [view, setView] = useState<OnboardingView>('select')
   const [pendingCardIds, setPendingCardIds] = useState<string[]>([])
@@ -166,6 +171,7 @@ export function OnboardingPage() {
         <OnboardingShell
           banks={banks}
           cards={cards}
+          initialSelectedIds={initialSelectedIds}
           onComplete={handleComplete}
         />
       )}
