@@ -13,6 +13,8 @@ import { GuestHero } from '../components/home/GuestHero'
 import { SubpromptSheet } from '../components/home/SubpromptSheet'
 import { InstallBanner } from '../components/shared/InstallBanner'
 import { useIntroSeen } from '../hooks/useIntroSeen'
+import { useRecentCategories } from '../hooks/useRecentCategories'
+import { RecentCategoriesRow } from '../components/home/RecentCategoriesRow'
 import { ResultCard } from '../components/result/ResultCard'
 import { RankedList } from '../components/result/RankedList'
 import { TiebreakerNote } from '../components/result/TiebreakerNote'
@@ -32,6 +34,7 @@ export function HomePage() {
   const { unlocks, categories: allCategories, banks } = useRewardData()
   const { userCardIds, isGuest } = useUserStore()
   const { seen: introSeen, markSeen: markIntroSeen } = useIntroSeen()
+  const { recentSlugs, addRecent } = useRecentCategories()
   const [searchQuery, setSearchQuery] = useState('')
   const [subprompt, setSubprompt] = useState<SubpromptState | null>(null)
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
@@ -62,6 +65,7 @@ export function HomePage() {
 
   const openResult = useCallback((slug: string) => {
     markIntroSeen()
+    addRecent(slug)
     setResultVisible(false)
     setSelectedSlug(slug)
     requestAnimationFrame(() => {
@@ -161,6 +165,16 @@ export function HomePage() {
           visible={!introSeen}
           onDismiss={markIntroSeen}
           onGetStarted={() => navigate('/auth')}
+        />
+      )}
+
+      {/* Recently used */}
+      {!isGuest && !searchQuery && (
+        <RecentCategoriesRow
+          slugs={recentSlugs}
+          categories={visibleCategories}
+          selectedSlug={selectedSlug}
+          onSelect={handleCategoryTap}
         />
       )}
 
