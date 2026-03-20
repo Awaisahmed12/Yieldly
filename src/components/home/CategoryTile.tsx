@@ -58,7 +58,7 @@ const SUBTITLES: Record<string, string> = {
 }
 
 interface CategoryTileProps {
-  category: CategoryRow & { bestLabel?: string }
+  category: CategoryRow
   onClick: (slug: string) => void
   isSelected?: boolean
   locked?: boolean
@@ -67,7 +67,6 @@ interface CategoryTileProps {
 export function CategoryTile({ category, onClick, isSelected = false, locked = false }: CategoryTileProps) {
   const IconComponent = ICON_MAP[category.icon_name] ?? ICON_MAP[category.slug] ?? CreditCard
   const subtitle = SUBTITLES[category.slug]
-  const { bestLabel } = category
 
   if (locked) {
     return (
@@ -113,10 +112,7 @@ export function CategoryTile({ category, onClick, isSelected = false, locked = f
           {subtitle}
         </span>
       )}
-      {!subtitle && bestLabel && !isSelected && (
-        <span className="font-mono text-[9px] text-accent/70 leading-none">{bestLabel}</span>
-      )}
-      {!subtitle && !bestLabel && category.is_brand && !isSelected && (
+      {!subtitle && category.is_brand && !isSelected && (
         <div className="w-1 h-1 rounded-full bg-accent/60" />
       )}
     </button>

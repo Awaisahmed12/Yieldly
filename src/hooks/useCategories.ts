@@ -11,7 +11,6 @@ import type { CategoryRow } from '../types/reward'
 
 export interface CategoryWithLock extends CategoryRow {
   locked: boolean
-  bestLabel?: string
 }
 
 export function useCategories(): { categories: CategoryWithLock[]; loading: boolean } {
@@ -32,20 +31,15 @@ export function useCategories(): { categories: CategoryWithLock[]; loading: bool
       .map(c => {
         const locked = isGuest && !GUEST_CATEGORY_SLUGS.includes(c.slug)
 
-        let bestLabel: string | undefined
         let _cpd = 0
 
         if (!locked && userCards.length > 0 && c.slug !== 'other') {
           const ranked = rankCardsForCategory(userCards, c.slug, rates, cppMode)
           const best = ranked[0]
-          if (best) {
-            _cpd = best.effectiveCpd
-            const pct = best.estimatedPct
-            bestLabel = best.rateType === 'multiplier' ? `~${pct}%` : `${pct}%`
-          }
+          if (best) _cpd = best.effectiveCpd
         }
 
-        return { ...c, locked, bestLabel, _cpd }
+        return { ...c, locked, _cpd }
       })
 
     // Sort by best CPD descending; other always last
