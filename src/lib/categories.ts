@@ -7,7 +7,8 @@ export const GUEST_CATEGORY_SLUGS = [
 const BASE_CATEGORY_SLUGS = [
   'groceries', 'dining', 'gas', 'travel', 'flights', 'hotels',
   'streaming', 'pharmacy', 'entertainment', 'transit',
-  'online_shopping', 'rent', 'wholesale_clubs', 'car_rental', 'foreign_spending',
+  'online_shopping', 'rent', 'wholesale_clubs', 'car_rental', 'beauty',
+  'foreign_spending', 'other',
 ]
 
 /**
@@ -35,8 +36,8 @@ export function filterRelevantCategories(
   allRates: RewardRateRow[]
 ): string[] {
   return slugs.filter(slug => {
-    if (slug === 'other') return false
-    // foreign_spending is always shown if the user has cards — it has no reward_rates rows
+    // other/foreign_spending always shown if user has cards
+    if (slug === 'other') return userCardIds.length > 0
     if (slug === 'foreign_spending') return userCardIds.length > 0
     // car_rental is always shown (has reward_rates and most users benefit from knowing)
     if (slug === 'car_rental') return allRates.some(r => userCardIds.includes(r.card_id) && r.category_slug === slug)

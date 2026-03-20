@@ -1,7 +1,7 @@
 import {
   ShoppingCart, UtensilsCrossed, Fuel, Globe, PlaneTakeoff, Hotel, Tv, Pill,
   Clapperboard, Train, ShoppingBag, Home, Warehouse, Package, Leaf, Car, Tag,
-  Apple, CreditCard, Lock, type LucideIcon,
+  Apple, Scissors, CreditCard, Lock, type LucideIcon,
 } from 'lucide-react'
 import type { CategoryRow } from '../../types/reward'
 
@@ -26,6 +26,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   Car,
   Tag,
   Apple,
+  Scissors,
   // Brand slug fallbacks
   amazon: Package,
   whole_foods: Leaf,

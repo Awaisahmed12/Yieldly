@@ -1,11 +1,12 @@
 import { useState, useRef, useCallback } from 'react'
-import { Lock } from 'lucide-react'
+import { Lock, Search, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useCategories, type CategoryWithLock } from '../hooks/useCategories'
 import { useRewardData } from '../hooks/useRewardData'
 import { useRewardLookup } from '../hooks/useRewardLookup'
 import { useUserStore } from '../store/userStore'
 import { getSubpromptOptions } from '../lib/categories'
+import { searchCategorySlugs } from '../lib/categorySearch'
 import { TopNav } from '../components/shared/TopNav'
 import { CategoryGrid } from '../components/home/CategoryGrid'
 import { GuestHero } from '../components/home/GuestHero'
@@ -31,11 +32,28 @@ export function HomePage() {
   const { unlocks, categories: allCategories, banks } = useRewardData()
   const { userCardIds, isGuest } = useUserStore()
   const { seen: introSeen, markSeen: markIntroSeen } = useIntroSeen()
+  const [searchQuery, setSearchQuery] = useState('')
   const [subprompt, setSubprompt] = useState<SubpromptState | null>(null)
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
   const [resultVisible, setResultVisible] = useState(false)
   const [activeNudge, setActiveNudge] = useState<NudgeVariant>(null)
   const resultRef = useRef<HTMLDivElement>(null)
+
+  const visibleCategories = categories.filter(c => !c.locked)
+  const filteredCategories = searchQuery.trim()
+    ? (() => {
+        const matchedSlugs = searchCategorySlugs(searchQuery)
+        if (matchedSlugs.length === 0) return []
+        const matched = visibleCategories.filter(c => matchedSlugs.includes(c.slug))
+        // other always last
+        matched.sort((a, b) => {
+          if (a.slug === 'other') return 1
+          if (b.slug === 'other') return -1
+          return matchedSlugs.indexOf(a.slug) - matchedSlugs.indexOf(b.slug)
+        })
+        return matched
+      })()
+    : visibleCategories
 
   const { ranked, winner, tie, loading: resultLoading } = useRewardLookup(selectedSlug)
   const categoryName = allCategories.find(c => c.slug === selectedSlug)?.display_name ?? ''
@@ -106,13 +124,36 @@ export function HomePage() {
       <TopNav showSettings title="Yieldly" />
 
       {/* Header */}
-      <div className="px-4 pt-5 pb-4">
+      <div className="px-4 pt-5 pb-3">
         <h1 className="font-serif text-2xl font-semibold text-text-primary leading-snug">
           Select a Category
         </h1>
         <p className="font-mono text-xs text-muted mt-1">
           Tap a category to see which card earns you the most.
         </p>
+      </div>
+
+      {/* Search */}
+      <div className="px-4 pb-4">
+        <div className="relative flex items-center">
+          <Search size={14} className="absolute left-3 text-muted/50 pointer-events-none" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            placeholder="Search or type a store, activity…"
+            className="w-full bg-surface border border-border rounded-xl pl-9 pr-9 py-2.5 font-mono text-xs text-text-primary placeholder:text-muted/40 focus:outline-none focus:border-accent/50 transition-colors"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 text-muted/50 hover:text-muted transition-colors"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
       </div>
 
       {isGuest && (
@@ -125,7 +166,7 @@ export function HomePage() {
 
       {/* Category grid */}
       <CategoryGrid
-        categories={categories.filter(c => !c.locked)}
+        categories={filteredCategories}
         onSelect={handleCategoryTap}
         loading={loading}
         selectedSlug={selectedSlug}
