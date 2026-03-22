@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
 import { useGuestCardSync } from './hooks/useGuestCardSync'
 import { useUserStore } from './store/userStore'
@@ -10,28 +10,6 @@ import { AdminPage } from './pages/Admin'
 import { OptimizePage } from './pages/Optimize'
 import { ComparePage } from './pages/Compare'
 
-interface ProtectedRouteProps {
-  children: React.ReactNode
-}
-
-function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { user, loading } = useUserStore()
-  const location = useLocation()
-
-  if (loading) {
-    return (
-      <div className="min-h-dvh bg-bg flex items-center justify-center">
-        <div className="text-muted font-mono text-sm animate-pulse">Loading...</div>
-      </div>
-    )
-  }
-
-  if (!user) {
-    return <Navigate to="/auth" state={{ from: location }} replace />
-  }
-
-  return <>{children}</>
-}
 
 function AuthRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useUserStore()
@@ -91,14 +69,7 @@ function AppRoutes() {
       />
       <Route path="/onboarding" element={<OnboardingRoute><OnboardingPage /></OnboardingRoute>} />
       <Route path="/" element={<HomePage />} />
-      <Route
-        path="/settings"
-        element={
-          <ProtectedRoute>
-            <SettingsPage />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/settings" element={<SettingsPage />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/optimize" element={<OptimizePage />} />
       <Route path="/compare" element={<ComparePage />} />

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useUserStore } from '../store/userStore'
+import { setGuestCardSlugs } from '../lib/guestStorage'
 import { useRewardData } from '../hooks/useRewardData'
 import { TopNav } from '../components/shared/TopNav'
 import { CardManager } from '../components/settings/CardManager'
@@ -29,7 +30,7 @@ const CPP_MODES: { value: CppMode; label: string; description: string }[] = [
 
 export function SettingsPage() {
   const navigate = useNavigate()
-  const { user, userCards, prefs, setPrefs, setUserCards, reset } = useUserStore()
+  const { user, userCards, prefs, setPrefs, setUserCards, setGuestCards, isGuest, reset } = useUserStore()
   const { banks, cards: allCards } = useRewardData()
   const [showAddSheet, setShowAddSheet] = useState(false)
   const [advancedOpen, setAdvancedOpen] = useState(false)
@@ -38,9 +39,16 @@ export function SettingsPage() {
   const cppMode = prefs?.cpp_mode ?? 'default'
 
   async function handleRemoveCard(cardId: string) {
-    if (!user) return
     if (!window.confirm('Remove this card?')) return
 
+    if (isGuest) {
+      const updated = userCards.filter(c => c.id !== cardId)
+      setGuestCardSlugs(updated.map(c => c.slug))
+      setGuestCards(updated, true)
+      return
+    }
+
+    if (!user) return
     setRemovingId(cardId)
     try {
       await supabase
@@ -58,8 +66,17 @@ export function SettingsPage() {
   }
 
   async function handleAddCards(newCardIds: string[]) {
-    if (!user || newCardIds.length === 0) return
+    if (newCardIds.length === 0) return
 
+    if (isGuest) {
+      const newCards = allCards.filter(c => newCardIds.includes(c.id))
+      const updated = [...userCards, ...newCards]
+      setGuestCardSlugs(updated.map(c => c.slug))
+      setGuestCards(updated, true)
+      return
+    }
+
+    if (!user) return
     try {
       await supabase
         .from('user_cards')
@@ -200,27 +217,41 @@ export function SettingsPage() {
           )}
         </div>
 
-        {/* Sign out */}
-        <div className="mt-6 mx-4">
-          <button
-            type="button"
-            onClick={handleSignOut}
-            className="w-full font-mono text-sm text-muted hover:text-red-400 transition-colors py-3 border border-border rounded-xl hover:border-red-400/30"
-          >
-            Sign out
-          </button>
-        </div>
+        {isGuest ? (
+          <div className="mt-6 mx-4">
+            <button
+              type="button"
+              onClick={() => navigate('/auth')}
+              className="w-full font-mono text-sm text-accent hover:opacity-80 transition-opacity py-3 border border-accent/30 rounded-xl"
+            >
+              Sign in to sync across devices →
+            </button>
+          </div>
+        ) : (
+          <>
+            {/* Sign out */}
+            <div className="mt-6 mx-4">
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="w-full font-mono text-sm text-muted hover:text-red-400 transition-colors py-3 border border-border rounded-xl hover:border-red-400/30"
+              >
+                Sign out
+              </button>
+            </div>
 
-        {/* Delete account */}
-        <div className="mt-3 mx-4">
-          <button
-            type="button"
-            onClick={handleDeleteAccount}
-            className="w-full font-mono text-sm text-red-500/50 hover:text-red-400 transition-colors py-3 border border-red-500/10 rounded-xl hover:border-red-400/30"
-          >
-            Delete account
-          </button>
-        </div>
+            {/* Delete account */}
+            <div className="mt-3 mx-4">
+              <button
+                type="button"
+                onClick={handleDeleteAccount}
+                className="w-full font-mono text-sm text-red-500/50 hover:text-red-400 transition-colors py-3 border border-red-500/10 rounded-xl hover:border-red-400/30"
+              >
+                Delete account
+              </button>
+            </div>
+          </>
+        )}
 
         {/* App version / info */}
         <p className="font-mono text-xs text-muted/40 text-center mt-6">

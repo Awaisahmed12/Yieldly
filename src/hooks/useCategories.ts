@@ -4,7 +4,6 @@ import { useRewardData } from './useRewardData'
 import {
   getUnlockedCategorySlugs,
   filterRelevantCategories,
-  GUEST_CATEGORY_SLUGS,
 } from '../lib/categories'
 import { rankCardsForCategory } from '../lib/rewards'
 import type { CategoryRow } from '../types/reward'
@@ -14,7 +13,7 @@ export interface CategoryWithLock extends CategoryRow {
 }
 
 export function useCategories(): { categories: CategoryWithLock[]; loading: boolean } {
-  const { userCardIds, userCards, isGuest, prefs } = useUserStore()
+  const { userCardIds, userCards, prefs } = useUserStore()
   const { categories, rates, unlocks, loading } = useRewardData()
   const cppMode = prefs?.cpp_mode ?? 'default'
 
@@ -29,7 +28,7 @@ export function useCategories(): { categories: CategoryWithLock[]; loading: bool
     const enriched: Enriched[] = categories
       .filter(c => relevantSlugs.includes(c.slug))
       .map(c => {
-        const locked = isGuest && !GUEST_CATEGORY_SLUGS.includes(c.slug)
+        const locked = false
 
         let _cpd = 0
 
@@ -50,7 +49,7 @@ export function useCategories(): { categories: CategoryWithLock[]; loading: bool
     })
 
     return enriched.map(({ _cpd: _ignored, ...rest }): CategoryWithLock => rest)
-  }, [userCardIds, userCards, categories, rates, unlocks, isGuest, cppMode])
+  }, [userCardIds, userCards, categories, rates, unlocks, cppMode])
 
   return { categories: visibleCategories, loading }
 }

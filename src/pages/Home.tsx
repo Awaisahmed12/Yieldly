@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from 'react'
 import { Search, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { useCategories, type CategoryWithLock } from '../hooks/useCategories'
+import { useCategories } from '../hooks/useCategories'
 import { useRewardData } from '../hooks/useRewardData'
 import { useRewardLookup } from '../hooks/useRewardLookup'
 import { useUserStore } from '../store/userStore'
@@ -95,11 +95,6 @@ export function HomePage() {
       setResultVisible(false)
       return
     }
-    const cat = categories.find(c => c.slug === slug) as CategoryWithLock | undefined
-    if (cat?.locked) {
-      navigate('/onboarding')
-      return
-    }
     const options = getSubpromptOptions(slug, userCardIds, unlocks, allCategories)
     if (options && options.length >= 2) {
       const label = categories.find(c => c.slug === slug)?.display_name ?? slug
@@ -169,7 +164,7 @@ export function HomePage() {
       )}
 
       {/* Recently used */}
-      {!isGuest && !searchQuery && (
+      {!searchQuery && (
         <RecentCategoriesRow
           slugs={recentSlugs}
           categories={visibleCategories}
@@ -186,19 +181,6 @@ export function HomePage() {
         selectedSlug={selectedSlug}
       />
 
-      {/* Unlock prompt for guests */}
-      {isGuest && !loading && (
-        <div className="px-4 mt-3">
-          <button
-            type="button"
-            onClick={() => navigate('/onboarding')}
-            className="w-full flex items-center justify-between bg-surface/40 border border-border/40 rounded-xl px-4 py-3 hover:border-accent/30 transition-colors"
-          >
-            <span className="font-mono text-xs text-muted/50">+9 more categories</span>
-            <span className="font-mono text-xs text-accent">Set up your wallet →</span>
-          </button>
-        </div>
-      )}
 
       {/* Inline result — slides in below grid, no overlay */}
       {selectedSlug && (
