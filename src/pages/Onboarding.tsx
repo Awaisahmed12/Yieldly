@@ -1,15 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useUserStore } from '../store/userStore'
 import { useRewardData } from '../hooks/useRewardData'
-import { getGuestCardSlugs, setGuestCardSlugs } from '../lib/guestStorage'
+import { getGuestCardSlugs, setGuestCardSlugs, clearGuestCardSlugs } from '../lib/guestStorage'
 import { OnboardingShell } from '../components/onboarding/OnboardingShell'
 import { LoadingSpinner } from '../components/shared/LoadingSpinner'
-import { TermsText } from '../components/auth/TermsText'
 import type { UserPreferencesRow } from '../types/supabase'
-
-type OnboardingView = 'select' | 'save'
 
 export function OnboardingPage() {
   const navigate = useNavigate()
@@ -18,13 +15,14 @@ export function OnboardingPage() {
   const { user, userCardIds, setPrefs, setUserCards, setGuestCards } = useUserStore()
   const { banks, cards, loading } = useRewardData()
 
-  // Pre-populate selections: authed users get their existing cards, guests get localStorage
+  // Pre-populate selections:
+  // - Authed users with DB cards → use those
+  // - Authed users with no DB cards (fresh signup) → fall back to localStorage guest cards
+  // - Guests → localStorage
+  const guestSlugIds = cards.filter(c => getGuestCardSlugs().includes(c.slug)).map(c => c.id)
   const initialSelectedIds = user
-    ? userCardIds
-    : cards.filter(c => getGuestCardSlugs().includes(c.slug)).map(c => c.id)
-
-  const [view, setView] = useState<OnboardingView>('select')
-  const [pendingCardIds, setPendingCardIds] = useState<string[]>([])
+    ? (userCardIds.length > 0 ? userCardIds : guestSlugIds)
+    : guestSlugIds
 
   async function handleSkip() {
     if (!user) return
@@ -36,18 +34,21 @@ export function OnboardingPage() {
       .single()
 
     if (data) setPrefs(data as UserPreferencesRow)
+    clearGuestCardSlugs()
     navigate('/')
   }
 
   async function handleComplete(selectedCardIds: string[]) {
-    // Guest path — show save/continue prompt
+    // Guest path — save to localStorage and go home
     if (!user) {
-      setPendingCardIds(selectedCardIds)
-      setView('save')
+      const selectedCards = cards.filter(c => selectedCardIds.includes(c.id))
+      setGuestCardSlugs(selectedCards.map(c => c.slug))
+      setGuestCards(selectedCards, true)
+      navigate('/')
       return
     }
 
-    // Authenticated path
+    // Authenticated path — save to DB
     try {
       await supabase
         .from('user_cards')
@@ -75,63 +76,11 @@ export function OnboardingPage() {
       const selectedCards = cards.filter(c => selectedCardIds.includes(c.id))
       setUserCards(selectedCards)
 
+      clearGuestCardSlugs()
       navigate('/')
     } catch (err) {
       console.error('Error completing onboarding:', err)
     }
-  }
-
-  function handleSaveToAccount() {
-    const selectedCards = cards.filter((c) => pendingCardIds.includes(c.id))
-    setGuestCardSlugs(selectedCards.map((c) => c.slug))
-    setGuestCards(selectedCards, true)
-    navigate('/auth')
-  }
-
-  function handleContinueAsGuest() {
-    const selectedCards = cards.filter((c) => pendingCardIds.includes(c.id))
-    setGuestCardSlugs(selectedCards.map((c) => c.slug))
-    setGuestCards(selectedCards, true)
-    navigate('/')
-  }
-
-  if (view === 'save') {
-    return (
-      <div className="min-h-dvh bg-bg flex flex-col items-center justify-center px-5 py-12 max-w-[480px] mx-auto" style={{ paddingTop: 'calc(3rem + env(safe-area-inset-top))' }}>
-        <div className="w-full max-w-sm">
-          <div className="text-center mb-8">
-            <p className="text-accent font-mono text-sm tracking-widest uppercase mb-3">Yieldly</p>
-            <h1 className="font-serif text-3xl font-semibold text-text-primary leading-tight">
-              Your wallet is ready
-            </h1>
-            <p className="text-muted font-mono text-xs mt-3 leading-relaxed">
-              Save it to a free account and your cards sync across devices — or just keep going.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            <button
-              type="button"
-              onClick={handleSaveToAccount}
-              className="w-full bg-accent text-bg font-mono font-medium py-3 px-4 rounded-lg text-sm hover:opacity-90 active:opacity-80 transition-opacity"
-            >
-              Save to account →
-            </button>
-            <button
-              type="button"
-              onClick={handleContinueAsGuest}
-              className="w-full bg-surface border border-border font-mono text-sm text-muted py-3 px-4 rounded-lg hover:text-text-primary hover:border-accent/30 transition-colors"
-            >
-              Continue as guest
-            </button>
-          </div>
-
-          <div className="mt-8">
-            <TermsText />
-          </div>
-        </div>
-      </div>
-    )
   }
 
   return (

@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { useUserStore } from '../store/userStore'
-import { migrateGuestCards } from '../lib/migration'
-import { clearGuestCardSlugs } from '../lib/guestStorage'
 import type { UserPreferencesRow } from '../types/supabase'
 
 export function useAuth() {
@@ -73,28 +71,17 @@ export function useAuth() {
     // Subscribe to auth state changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return
       setSession(session)
       setUser(session?.user ?? null)
       if (session?.user) {
         setLoading(true)
-        const { isGuest, hasCustomizedCards, userCardIds, clearGuest } = useUserStore.getState()
+        // Guest cards stay in localStorage — onboarding will handle the migration
+        const { clearGuest } = useUserStore.getState()
+        clearGuest()
 
-        const runLoad = async () => {
-          if (event === 'SIGNED_IN' && isGuest && hasCustomizedCards && userCardIds.length > 0) {
-            try {
-              await migrateGuestCards(session.user.id, userCardIds)
-              clearGuestCardSlugs()
-              clearGuest()
-            } catch (err) {
-              console.error('[useAuth] guest migration failed:', err)
-            }
-          }
-          await loadUserData(session.user.id)
-        }
-
-        runLoad().finally(() => {
+        loadUserData(session.user.id).finally(() => {
           if (mounted) setLoading(false)
         })
       } else {

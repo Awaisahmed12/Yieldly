@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
 import { useGuestCardSync } from './hooks/useGuestCardSync'
 import { useUserStore } from './store/userStore'
+import { getGuestCardSlugs } from './lib/guestStorage'
 import { AuthPage } from './pages/Auth'
 import { OnboardingPage } from './pages/Onboarding'
 import { HomePage } from './pages/Home'
@@ -53,6 +54,26 @@ function OnboardingRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
 
+/** First-time guests (no cards chosen yet) go straight to card picker */
+function HomeRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useUserStore()
+
+  if (loading) {
+    return (
+      <div className="min-h-dvh bg-bg flex items-center justify-center">
+        <div className="text-muted font-mono text-sm animate-pulse">Loading...</div>
+      </div>
+    )
+  }
+
+  // Guest with no stored cards → pick cards first
+  if (!user && getGuestCardSlugs().length === 0) {
+    return <Navigate to="/onboarding" replace />
+  }
+
+  return <>{children}</>
+}
+
 function AppRoutes() {
   useAuth()
   useGuestCardSync()
@@ -68,7 +89,7 @@ function AppRoutes() {
         }
       />
       <Route path="/onboarding" element={<OnboardingRoute><OnboardingPage /></OnboardingRoute>} />
-      <Route path="/" element={<HomePage />} />
+      <Route path="/" element={<HomeRoute><HomePage /></HomeRoute>} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/optimize" element={<OptimizePage />} />
