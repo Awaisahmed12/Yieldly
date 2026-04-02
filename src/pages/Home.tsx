@@ -9,10 +9,8 @@ import { getSubpromptOptions } from '../lib/categories'
 import { searchCategorySlugs } from '../lib/categorySearch'
 import { TopNav } from '../components/shared/TopNav'
 import { CategoryGrid } from '../components/home/CategoryGrid'
-import { GuestHero } from '../components/home/GuestHero'
 import { SubpromptSheet } from '../components/home/SubpromptSheet'
 import { InstallBanner } from '../components/shared/InstallBanner'
-import { useIntroSeen } from '../hooks/useIntroSeen'
 import { useRecentCategories } from '../hooks/useRecentCategories'
 import { RecentCategoriesRow } from '../components/home/RecentCategoriesRow'
 import { ResultCard } from '../components/result/ResultCard'
@@ -26,20 +24,16 @@ interface SubpromptState {
   parentLabel: string
 }
 
-type NudgeVariant = 'personalize' | null
-
 export function HomePage() {
   const navigate = useNavigate()
   const { categories, loading } = useCategories()
   const { unlocks, categories: allCategories, banks } = useRewardData()
-  const { userCardIds, isGuest } = useUserStore()
-  const { seen: introSeen, markSeen: markIntroSeen } = useIntroSeen()
+  const { userCardIds } = useUserStore()
   const { recentSlugs, addRecent } = useRecentCategories()
   const [searchQuery, setSearchQuery] = useState('')
   const [subprompt, setSubprompt] = useState<SubpromptState | null>(null)
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
   const [resultVisible, setResultVisible] = useState(false)
-  const [activeNudge, setActiveNudge] = useState<NudgeVariant>(null)
   const resultRef = useRef<HTMLDivElement>(null)
 
   const visibleCategories = categories.filter(c => !c.locked)
@@ -64,7 +58,6 @@ export function HomePage() {
 
 
   const openResult = useCallback((slug: string) => {
-    markIntroSeen()
     addRecent(slug)
     setResultVisible(false)
     setSelectedSlug(slug)
@@ -76,18 +69,8 @@ export function HomePage() {
           window.scrollTo({ top: top - window.innerHeight * 0.55, behavior: 'smooth' })
         }
       }, 50)
-
-      // Show personalization nudge after 3rd result view for guests (once per session)
-      if (isGuest && !sessionStorage.getItem('nudge_shown')) {
-        const count = parseInt(sessionStorage.getItem('result_view_count') ?? '0', 10) + 1
-        sessionStorage.setItem('result_view_count', String(count))
-        if (count >= 3) {
-          sessionStorage.setItem('nudge_shown', '1')
-          setActiveNudge('personalize')
-        }
-      }
     })
-  }, [isGuest, markIntroSeen])
+  }, [addRecent])
 
   function handleCategoryTap(slug: string) {
     if (slug === selectedSlug) {
@@ -107,15 +90,6 @@ export function HomePage() {
   function handleSubpromptSelect(slug: string) {
     setSubprompt(null)
     openResult(slug)
-  }
-
-  function handleNudgeConfirm() {
-    setActiveNudge(null)
-    navigate('/onboarding')
-  }
-
-  function handleNudgeDismiss() {
-    setActiveNudge(null)
   }
 
   return (
@@ -154,14 +128,6 @@ export function HomePage() {
           )}
         </div>
       </div>
-
-      {isGuest && (
-        <GuestHero
-          visible={!introSeen}
-          onDismiss={markIntroSeen}
-          onGetStarted={() => navigate('/onboarding')}
-        />
-      )}
 
       {/* Recently used */}
       {!searchQuery && (
@@ -204,32 +170,6 @@ export function HomePage() {
             <>
               <ResultCard result={winner} bank={winnerBank} />
               {tie && <TiebreakerNote tie={tie} />}
-              {activeNudge === 'personalize' && (
-                <div className="mx-4 mt-4 mb-1 bg-surface border border-accent/20 rounded-xl px-4 py-4">
-                  <p className="font-mono text-[10px] text-accent uppercase tracking-[0.18em] mb-1">
-                    Popular cards
-                  </p>
-                  <p className="font-serif text-sm text-text-primary leading-snug mb-3">
-                    Have your own cards? Set up your wallet for personalized results.
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={handleNudgeConfirm}
-                      className="bg-accent text-bg font-mono text-xs font-medium py-2 px-4 rounded-lg hover:opacity-90 active:opacity-80 transition-opacity"
-                    >
-                      Personalize →
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleNudgeDismiss}
-                      className="font-mono text-xs text-muted hover:text-text-primary transition-colors"
-                    >
-                      These look fine
-                    </button>
-                  </div>
-                </div>
-              )}
               <RankedList results={ranked} isForeignSpending={selectedSlug === 'foreign_spending'} />
             </>
           ) : (
