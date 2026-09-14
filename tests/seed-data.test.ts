@@ -15,6 +15,7 @@ const data = loadSeed(undefined, [
   'supabase/migrations/0008_canadian_cards.sql',
   'supabase/migrations/0009_online_groceries.sql',
   'supabase/migrations/0010_data_audit_fixes.sql',
+  'supabase/migrations/0011_data_audit_pass2.sql',
 ])
 
 describe('seed integrity', () => {
@@ -280,5 +281,49 @@ describe('September 2026 audit corrections', () => {
     expect(rateOf(data, 'amazon_store_card', 'amazon')?.rate).toBe(5)
     expect(data.unlocks.some(u => u.cardSlug === 'amazon_store_card' && u.category === 'whole_foods')).toBe(true)
     expect(rateOf(data, 'discover_it_student', 'groceries')?.cap).toBe(1500)
+  })
+})
+
+describe('September 2026 audit, second verification pass', () => {
+  it('base rates on flat-rate cards', () => {
+    const base: Record<string, number> = {
+      chase_freedom_unlimited: 1.5, chase_ink_business_unlimited: 1.5, citi_double_cash: 2, wells_fargo_active_cash: 2,
+      wells_fargo_signify_business_cash: 2, capital_one_venture: 2, capital_one_venture_x: 2, capital_one_quicksilver: 1.5,
+      capital_one_venture_one: 1.25, capital_one_spark_cash: 2, capital_one_spark_miles_select: 1.5, bofa_premium_rewards: 1.5,
+      bofa_travel_rewards: 1.5, discover_it_miles: 1.5, fidelity_rewards_visa: 2, robinhood_gold_card: 3, paypal_cashback: 1.5,
+      apple_card: 2, amex_cash_magnet: 1.5, amex_blue_business_plus: 2, amex_hilton_honors: 3, amex_marriott_brilliant: 2,
+      chase_marriott_boundless: 2, chase_ihg_one_rewards_traveler: 2, chase_ihg_one_rewards_premier: 3,
+    }
+    for (const [slug, rate] of Object.entries(base)) expect(rateOf(data, slug, 'other')?.rate, slug).toBe(rate)
+    for (const slug of ['chase_sapphire_preferred', 'chase_sapphire_reserve', 'amex_gold', 'amex_platinum', 'citi_custom_cash', 'citi_strata_premier', 'capital_one_savorone', 'wells_fargo_autograph', 'usbank_altitude_go', 'bilt_blue', 'barclays_jetblue_plus', 'discover_it_cash']) {
+      expect(rateOf(data, slug, 'other'), slug).toBeUndefined()
+    }
+  })
+  it('foreign transaction fees', () => {
+    expect(data.cards.citi_costco.ftf).toBe(0)
+    expect(data.cards.usbank_altitude_go.ftf).toBe(3)
+    expect(data.cards.robinhood_gold_card.ftf).toBe(3)
+    expect(data.cards.chase_freedom_flex.ftf).toBe(0)
+    expect(data.cards.chase_freedom_unlimited.ftf).toBe(3)
+  })
+  it('rows added or corrected', () => {
+    expect(rateOf(data, 'amex_green', 'flights')?.rate).toBe(3)
+    expect(rateOf(data, 'amex_green', 'hotels')?.rate).toBe(3)
+    expect(rateOf(data, 'amex_business_gold', 'utilities')?.rate).toBe(4)
+    expect(rateOf(data, 'amex_delta_gold', 'online_groceries')?.notes).not.toMatch(/cap/)
+    expect(rateOf(data, 'chase_aeroplan', 'travel')?.rate).toBe(3)
+    expect(rateOf(data, 'chase_aeroplan', 'hotels')?.rate).toBe(3)
+    expect(rateOf(data, 'chase_southwest_priority', 'dining')?.cap).toBe(8000)
+    expect(rateOf(data, 'chase_british_airways', 'flights')?.notes).toMatch(/other airlines 1x/)
+    expect(rateOf(data, 'citi_aadvantage_executive', 'hotels')?.rate).toBe(12)
+    expect(rateOf(data, 'citi_custom_cash', 'flights')?.cap).toBe(500)
+    expect(rateOf(data, 'citi_custom_cash', 'hotels')?.rate).toBe(5)
+    expect(rateOf(data, 'capital_one_venture_x_business', 'travel')?.rate).toBe(10)
+    expect(rateOf(data, 'wells_fargo_autograph', 'ev_charging')?.rate).toBe(3)
+    expect(rateOf(data, 'bofa_customized_cash', 'utilities')?.cap).toBe(2500)
+    expect(rateOf(data, 'usbank_altitude_reserve', 'dining')).toBeUndefined()
+    expect(rateOf(data, 'usbank_cash_plus', 'entertainment')?.notes).toMatch(/Movie theaters/)
+    expect(rateOf(data, 'barclays_wyndham_rewards_earner_plus', 'hotels')?.notes).toMatch(/Wyndham stays only/)
+    expect(rateOf(data, 'fidelity_rewards_visa', 'other')?.notes).toMatch(/Fidelity account/)
   })
 })

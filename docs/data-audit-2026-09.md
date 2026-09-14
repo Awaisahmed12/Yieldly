@@ -163,3 +163,43 @@ Run migrations 0008, 0009 and 0010 in order against Supabase. All three are
 idempotent (`ON CONFLICT … DO NOTHING/DO UPDATE`, targeted `DELETE`s). A fresh
 database seeded from `supabase/seed/*.sql` plus the migrations ends in the same
 state; `npm test` checks that the two stay in sync.
+
+## Second verification pass (migration 0011)
+
+A second set of five agents re-checked every card against the post-audit data, this
+time required to confirm each card's **base rate** with a source before anything else.
+Result: no base rate (`other` row) was wrong on any of the 92 US cards. What they did
+find, now in `supabase/migrations/0011_data_audit_pass2.sql` and the seed files:
+
+| card | change |
+|---|---|
+| Citi Costco Anywhere | FTF 3% → **0%** (Citi's own FAQ; migration 0003 had it in the 3% list) |
+| US Bank Altitude Go | FTF 0% → **3%** (added Sept 2024 for new accounts, Aug 2025 for existing) |
+| Robinhood Gold | FTF 0% → 3% for accounts opened from July 2026; note updated |
+| Citi AAdvantage Executive | AAdvantage Hotels / Cars portal rows 10x → **12x** (Aug 2026 refresh) |
+| Citi Custom Cash | +5% flights, hotels ("select travel") and car rentals ("select transit") as eligible categories |
+| Chase Air Canada Aeroplan | +3x travel, hotels, car rental, transit (Sept 2026 refresh, now three sources) |
+| Chase Southwest Priority | 2x gas/dining capped at $8,000/yr combined |
+| Chase Ink Business Cash | utilities note: $25k cap shared with office supply stores |
+| Chase United Club | full name is now "United Club℠ Card" |
+| Amex Green | +3x flights, hotels, car rental (3x all travel; the app has no travel→flights fallback) |
+| Amex Business Gold, Marriott Bonvoy Business | +4x utilities (wireless phone service is a 4x category; phone plans map to `utilities` like Autograph) |
+| Amex Delta Gold/Platinum, Hilton Honors/Surpass | online-groceries notes no longer mention a cap (those bonuses are uncapped) |
+| Capital One Venture X Business | travel 5x → 10x, notes say Business Travel (same terms as the consumer card) |
+| Wells Fargo Autograph | +3x EV charging (part of the gas category) |
+| BofA Customized Cash | +3% utilities (cable/internet/phone under the online-shopping choice) |
+| US Bank Altitude Reserve | dining 3x removed: it was the mobile-wallet tender bonus, not a category |
+| US Bank Cash+ | entertainment note: movie theaters only |
+| Wyndham Earner Plus, Bilt Blue, Sam's Club, Apple Card, Fidelity | note corrections (hotels excluded from Wyndham travel; Bilt rent mechanics; Sam's Cash in-club only; Apple 3% without Apple Pay; Fidelity 2% requires deposit) |
+
+**Modeling rule added:** a co-brand bonus lives on the brand tile when one exists
+(Delta, United, Hilton, …). When no tile exists (British Airways, Wyndham, Bilt's Lyft
+bonus, TD Aeroplan) the bonus stays on the generic tile with an explicit "X only; others
+1x" note rather than being dropped.
+
+**Still unverified after two passes:** Robinhood's 5% travel-portal rate (one source
+says it was removed in 2026); Citi Strata Premier's rumored July 2026 change of terms
+(every 2026 review still shows $95 / 10x / 3x); Bilt Blue's exact multipliers (several
+reviews agree, issuer pages unreachable); the Altitude Reserve Travel Center 5x/10x
+wording; legacy $95 Savor portal rows. Discover's rotating rows deliberately keep the
+"common categories, verify the quarter" convention rather than quarter-specific rows.
