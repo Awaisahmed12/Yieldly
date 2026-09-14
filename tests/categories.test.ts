@@ -22,6 +22,13 @@ describe('filterRelevantCategories', () => {
     expect(shown).not.toContain('beauty')
   })
 
+  it('shows every category when a card has an elevated base rate', () => {
+    // Freedom Unlimited: 1.5% on everything beats Sapphire Preferred's 1x in store.
+    const rates = [rate('cfu', 'other', 1.5), rate('cfu', 'dining', 3), rate('csp', 'online_groceries', 3)]
+    const shown = filterRelevantCategories(slugs, ['cfu', 'csp'], rates)
+    expect(shown).toEqual(slugs)
+  })
+
   it('shows nothing without cards', () => {
     expect(filterRelevantCategories(slugs, [], [])).toEqual([])
   })

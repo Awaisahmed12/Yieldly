@@ -39,11 +39,18 @@ export function filterRelevantCategories(
   userCardIds: string[],
   allRates: RewardRateRow[]
 ): string[] {
+  const hasFlatBonus = allRates.some(r =>
+    userCardIds.includes(r.card_id) && r.category_slug === 'other' && r.rate > 1.0
+  )
   return slugs.filter(slug => {
     // other/foreign_spending always shown if user has cards
     if (slug === 'other') return userCardIds.length > 0
     if (slug === 'foreign_spending') return userCardIds.length > 0
     if (ALWAYS_SHOWN.includes(slug)) return userCardIds.length > 0
+
+    // A card with an elevated base rate (e.g. Freedom Unlimited 1.5%, Double Cash 2%)
+    // beats 1x in every category, so every category is worth showing.
+    if (hasFlatBonus) return true
 
     return allRates.some(r =>
       userCardIds.includes(r.card_id) &&
