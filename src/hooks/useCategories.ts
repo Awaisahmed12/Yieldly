@@ -48,7 +48,7 @@ export function useCategories(): { categories: CategoryWithLock[]; loading: bool
       return b._cpd - a._cpd
     })
 
-    return enriched.map(({ _cpd: _ignored, ...rest }): CategoryWithLock => rest)
+    return enriched.map((c): CategoryWithLock => { const { _cpd, ...rest } = c; void _cpd; return rest })
   }, [userCardIds, userCards, categories, rates, unlocks, cppMode])
 
   return { categories: visibleCategories, loading }

@@ -185,3 +185,36 @@ WITH card_ids AS (SELECT slug, id FROM cards)
 INSERT INTO card_unlocks (card_id, category_slug)
 SELECT c.id, 'delta'       FROM card_ids c WHERE c.slug = 'amex_delta_platinum_business'
 ON CONFLICT DO NOTHING;
+
+-- Amex Cobalt (Canada)
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'uber_eats'   FROM card_ids c WHERE c.slug = 'amex_cobalt'
+ON CONFLICT DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'uber'        FROM card_ids c WHERE c.slug = 'amex_cobalt'
+ON CONFLICT DO NOTHING;
+
+-- Audit additions (September 2026)
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'apple' FROM card_ids c WHERE c.slug = 'apple_card'
+ON CONFLICT DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'uber' FROM card_ids c WHERE c.slug = 'apple_card'
+ON CONFLICT DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'uber_eats' FROM card_ids c WHERE c.slug = 'apple_card'
+ON CONFLICT DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO card_unlocks (card_id, category_slug)
+SELECT c.id, 'whole_foods' FROM card_ids c WHERE c.slug = 'amazon_store_card'
+ON CONFLICT DO NOTHING;

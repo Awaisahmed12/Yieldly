@@ -90,8 +90,8 @@ Auto-updates: new SW activates immediately on next page load.
 
 ```
 banks (13)
-  └── cards (57)  ←── reward_rates (207) ──→ categories (29, hierarchical)
-                  ←── card_unlocks (21)  ──→ categories (brand only)
+  └── cards (95)  ←── reward_rates (~400) ──→ categories (37, hierarchical)
+                  ←── card_unlocks (40)  ──→ categories (brand only)
 
 auth.users
   └── user_cards (M)
