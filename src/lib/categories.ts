@@ -5,7 +5,7 @@ export const GUEST_CATEGORY_SLUGS = [
 ]
 
 const BASE_CATEGORY_SLUGS = [
-  'groceries', 'dining', 'gas', 'travel', 'flights', 'hotels',
+  'groceries', 'online_groceries', 'dining', 'gas', 'travel', 'flights', 'hotels',
   'streaming', 'pharmacy', 'entertainment', 'transit',
   'online_shopping', 'rent', 'wholesale_clubs', 'car_rental', 'beauty',
   'utilities', 'fitness', 'ev_charging', 'foreign_spending', 'other',

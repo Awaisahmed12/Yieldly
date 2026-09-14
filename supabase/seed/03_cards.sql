@@ -15,6 +15,8 @@
 --   Bonvoy  (Marriott Bonvoy)       : 0.60 / 0.80 / 1.10
 --   Hyatt   (World of Hyatt)        : 1.20 / 1.70 / 2.20
 --   Alaska  (Alaska Airlines Miles) : 1.00 / 1.40 / 1.80
+--   Aeroplan (Air Canada Aeroplan)  : 1.20 / 1.50 / 2.00
+--   MR (Canada, per-card override) : 1.00 / 1.50 / 2.20  — Canadian Membership Rewards is worth more than US MR
 
 -- ── CHASE ──────────────────────────────────────────────────────────────────
 
@@ -610,4 +612,21 @@ WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
 SELECT b.id, 'wells_fargo_signify_business_cash', 'Signify Business Cash', 'Wells Fargo Signify Business Cash℠ Card', true, 'CB', 1.00, 1.00, 1.00, 0.00
 FROM bank_ids b WHERE b.slug = 'wells_fargo'
+ON CONFLICT (slug) DO NOTHING;
+
+-- ── CANADA ───────────────────────────────────────────────────────────────────
+-- Amex Cobalt sits under the American Express bank; TD is its own bank.
+
+WITH bank_ids AS (SELECT slug, id FROM banks)
+INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee, foreign_transaction_fee)
+SELECT b.id, 'amex_cobalt', 'Cobalt Card', 'American Express Cobalt® Card (Canada)',
+  false, 'MR', 1.00, 1.50, 2.20, 191.88, 2.50
+FROM bank_ids b WHERE b.slug = 'amex'
+ON CONFLICT (slug) DO NOTHING;
+
+WITH bank_ids AS (SELECT slug, id FROM banks)
+INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee, foreign_transaction_fee)
+SELECT b.id, 'td_aeroplan_visa_infinite', 'Aeroplan Visa Infinite', 'TD® Aeroplan® Visa Infinite* Card',
+  false, 'Aeroplan', 1.20, 1.50, 2.00, 139.00, 2.50
+FROM bank_ids b WHERE b.slug = 'td'
 ON CONFLICT (slug) DO NOTHING;

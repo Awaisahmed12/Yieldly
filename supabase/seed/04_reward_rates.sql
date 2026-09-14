@@ -64,7 +64,8 @@ FROM card_ids c WHERE c.slug = 'chase_freedom_flex'
 ON CONFLICT (card_id, category_slug) DO NOTHING;
 
 -- ── CHASE SAPPHIRE PREFERRED ──────────────────────────────────────────────
--- 3x dining, 3x groceries, 5x travel portal, 2x flights/hotels, 3x streaming, 5x transit portal
+-- (June 2026 terms) 5x Chase Travel, 3x dining, 3x ONLINE groceries (1x in store), 3x streaming,
+-- 3x gas & EV charging, 2x all other travel (flights, hotels, transit, car rental)
 
 WITH card_ids AS (SELECT slug, id FROM cards)
 INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
@@ -74,7 +75,7 @@ ON CONFLICT (card_id, category_slug) DO NOTHING;
 
 WITH card_ids AS (SELECT slug, id FROM cards)
 INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
-SELECT c.id, 'groceries', 3.00, 'multiplier', NULL, NULL, NULL
+SELECT c.id, 'online_groceries', 3.00, 'multiplier', NULL, NULL, 'Online grocery orders (delivery, pickup, store apps); excludes Walmart, Target & wholesale clubs. In-store groceries earn 1x'
 FROM card_ids c WHERE c.slug = 'chase_sapphire_preferred'
 ON CONFLICT (card_id, category_slug) DO NOTHING;
 
@@ -92,7 +93,7 @@ ON CONFLICT (card_id, category_slug) DO NOTHING;
 
 WITH card_ids AS (SELECT slug, id FROM cards)
 INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
-SELECT c.id, 'hotels', 2.00, 'multiplier', NULL, NULL, NULL
+SELECT c.id, 'hotels', 2.00, 'multiplier', NULL, NULL, 'Hotels booked direct; 3x at Airbnb, Vrbo & other vacation rentals'
 FROM card_ids c WHERE c.slug = 'chase_sapphire_preferred'
 ON CONFLICT (card_id, category_slug) DO NOTHING;
 
@@ -104,7 +105,19 @@ ON CONFLICT (card_id, category_slug) DO NOTHING;
 
 WITH card_ids AS (SELECT slug, id FROM cards)
 INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
-SELECT c.id, 'transit', 5.00, 'multiplier', NULL, NULL, 'Via Chase Travel portal'
+SELECT c.id, 'transit', 2.00, 'multiplier', NULL, NULL, 'Transit, taxis & rideshare count as other travel'
+FROM card_ids c WHERE c.slug = 'chase_sapphire_preferred'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'gas', 3.00, 'multiplier', NULL, NULL, 'Gas stations (added June 2026)'
+FROM card_ids c WHERE c.slug = 'chase_sapphire_preferred'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'ev_charging', 3.00, 'multiplier', NULL, NULL, 'EV charging (added June 2026)'
 FROM card_ids c WHERE c.slug = 'chase_sapphire_preferred'
 ON CONFLICT (card_id, category_slug) DO NOTHING;
 
@@ -1484,7 +1497,7 @@ ON CONFLICT (card_id, category_slug) DO NOTHING;
 
 WITH card_ids AS (SELECT slug, id FROM cards)
 INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
-SELECT c.id, 'car_rental', 2.00, 'multiplier', NULL, NULL, 'Via Chase Travel portal'
+SELECT c.id, 'car_rental', 2.00, 'multiplier', NULL, NULL, 'Booked direct; 5x when booked through Chase Travel'
 FROM card_ids c WHERE c.slug = 'chase_sapphire_preferred'
 ON CONFLICT (card_id, category_slug) DO NOTHING;
 
@@ -2241,4 +2254,97 @@ WITH card_ids AS (SELECT slug, id FROM cards)
 INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
 SELECT c.id, 'ev_charging', 4.00, 'cashback', NULL, NULL, 'EV charging stations'
 FROM card_ids c WHERE c.slug = 'wells_fargo_attune'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── AMEX COBALT (CANADA) ─────────────────────────────────────────────────────
+-- 5x eats & drinks ($2,500/mo combined cap), 3x streaming, 2x gas/transit/travel; Canada only
+
+-- 5x eats & drinks (restaurants, grocery, food delivery) — combined $2,500/month cap, then 1x
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'dining', 5.00, 'multiplier', 2500.00, 'monthly', 'Restaurants, cafés, bars & food delivery in Canada; shares $2,500/mo cap with groceries, then 1x'
+FROM card_ids c WHERE c.slug = 'amex_cobalt'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'groceries', 5.00, 'multiplier', 2500.00, 'monthly', 'Stand-alone grocery stores in Canada (not Walmart/Costco); shares $2,500/mo cap with dining, then 1x'
+FROM card_ids c WHERE c.slug = 'amex_cobalt'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'uber_eats', 5.00, 'multiplier', 2500.00, 'monthly', 'Food delivery in Canada; counts toward the $2,500/mo eats & drinks cap'
+FROM card_ids c WHERE c.slug = 'amex_cobalt'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- 3x streaming
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'streaming', 3.00, 'multiplier', NULL, NULL, 'Eligible streaming subscriptions in Canada (Netflix, Spotify, Disney+, Crave, etc.)'
+FROM card_ids c WHERE c.slug = 'amex_cobalt'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- 2x gas, transit & ride share, travel
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'gas', 2.00, 'multiplier', NULL, NULL, 'Stand-alone gas stations in Canada'
+FROM card_ids c WHERE c.slug = 'amex_cobalt'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'transit', 2.00, 'multiplier', NULL, NULL, 'Public transit, taxi & ride share in Canada'
+FROM card_ids c WHERE c.slug = 'amex_cobalt'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'uber', 2.00, 'multiplier', NULL, NULL, 'Ride share in Canada'
+FROM card_ids c WHERE c.slug = 'amex_cobalt'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'travel', 2.00, 'multiplier', NULL, NULL, 'Air, water, rail & road transport, lodging and tour operators'
+FROM card_ids c WHERE c.slug = 'amex_cobalt'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 2.00, 'multiplier', NULL, NULL, 'Air, water, rail & road transport, lodging and tour operators'
+FROM card_ids c WHERE c.slug = 'amex_cobalt'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'hotels', 2.00, 'multiplier', NULL, NULL, 'Air, water, rail & road transport, lodging and tour operators'
+FROM card_ids c WHERE c.slug = 'amex_cobalt'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+-- ── TD AEROPLAN VISA INFINITE ────────────────────────────────────────────────
+-- 1.5x gas, EV charging, groceries and direct Air Canada purchases
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'gas', 1.50, 'multiplier', NULL, NULL, 'Gas stations'
+FROM card_ids c WHERE c.slug = 'td_aeroplan_visa_infinite'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'ev_charging', 1.50, 'multiplier', NULL, NULL, 'Electric vehicle charging'
+FROM card_ids c WHERE c.slug = 'td_aeroplan_visa_infinite'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'groceries', 1.50, 'multiplier', NULL, NULL, 'Grocery stores'
+FROM card_ids c WHERE c.slug = 'td_aeroplan_visa_infinite'
+ON CONFLICT (card_id, category_slug) DO NOTHING;
+
+WITH card_ids AS (SELECT slug, id FROM cards)
+INSERT INTO reward_rates (card_id, category_slug, rate, rate_type, cap_amount, cap_period, notes)
+SELECT c.id, 'flights', 1.50, 'multiplier', NULL, NULL, 'Purchases made directly with Air Canada, incl. Air Canada Vacations'
+FROM card_ids c WHERE c.slug = 'td_aeroplan_visa_infinite'
 ON CONFLICT (card_id, category_slug) DO NOTHING;

@@ -18,6 +18,17 @@ const KEYWORD_MAP: KeywordEntry[] = [
       'supermarket', 'grocery', 'groceries', 'produce', 'fresh market', 'harris teeter',
       'winn dixie', 'piggly wiggly', 'shop rite', 'shoprite', 'vons', 'ralphs',
       'fry\'s', 'frys', 'king soopers', 'trader joe', "trader joe's",
+      'loblaws', 'no frills', 'sobeys', 'superstore', 'real canadian superstore', 'save-on-foods', 'safeway canada', 'longo\'s', 'farm boy',
+    ],
+  },
+  // Online groceries — delivery / pickup / supermarket apps
+  {
+    slug: 'online_groceries',
+    terms: [
+      'online grocery', 'online groceries', 'grocery delivery', 'grocery pickup',
+      'instacart', 'amazon fresh', 'shipt', 'fresh direct', 'freshdirect', 'thrive market',
+      'misfits market', 'imperfect foods', 'hungryroot', 'boxed', 'curbside', 'store pickup',
+      'voila', 'pc express', 'instabuggy',
     ],
   },
   // Dining — restaurants, fast food, coffee, delivery apps
@@ -31,6 +42,7 @@ const KEYWORD_MAP: KeywordEntry[] = [
       'five guys', 'in-n-out', 'in n out', 'popeyes', 'kfc', 'dominos', "domino's",
       'papa johns', 'takeout', 'take out', 'dine out', 'fast food', 'bar', 'pub',
       'doordash', 'grubhub', 'seamless', 'postmates',
+      'tim hortons', 'tims', 'skip the dishes', 'skipthedishes',
     ],
   },
   // Uber Eats — brand category (maps to dining brand child)
@@ -45,6 +57,7 @@ const KEYWORD_MAP: KeywordEntry[] = [
       'gas', 'fuel', 'petrol', 'station', 'shell', 'exxon', 'bp', 'chevron',
       'citgo', 'mobil', 'sunoco', 'marathon', 'speedway', 'wawa', 'casey\'s',
       'kwik trip', 'pilot', 'love\'s', 'fill up', 'pump',
+      'petro-canada', 'petro canada', 'esso', 'ultramar', 'irving', 'husky', 'canadian tire gas',
     ],
   },
   // Travel portal
@@ -61,6 +74,7 @@ const KEYWORD_MAP: KeywordEntry[] = [
     terms: [
       'flight', 'flights', 'fly', 'airline', 'airfare', 'plane', 'airport',
       'boarding', 'ticket', 'american airlines', 'spirit', 'frontier',
+      'air canada', 'aeroplan', 'westjet', 'porter',
     ],
   },
   // Hotels
@@ -79,6 +93,7 @@ const KEYWORD_MAP: KeywordEntry[] = [
       'peacock', 'paramount', 'apple tv', 'prime video', 'amazon prime video',
       'spotify', 'apple music', 'tidal', 'youtube premium', 'subscription',
       'music', 'tv show', 'series',
+      'crave', 'tsn', 'sportsnet',
     ],
   },
   // Pharmacy
@@ -107,6 +122,7 @@ const KEYWORD_MAP: KeywordEntry[] = [
       'transit', 'bus', 'subway', 'metro', 'train', 'commute', 'lyft',
       'taxi', 'cab', 'public transport', 'mta', 'cta', 'bart', 'mbta',
       'rail', 'amtrak', 'scooter', 'bike share',
+      'presto', 'ttc', 'go transit', 'stm', 'translink', 'via rail',
     ],
   },
   // Uber — brand category (maps to transit brand child)

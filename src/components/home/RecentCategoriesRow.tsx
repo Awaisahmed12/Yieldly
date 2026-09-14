@@ -1,12 +1,12 @@
 import {
-  ShoppingCart, UtensilsCrossed, Fuel, Globe, PlaneTakeoff, Hotel, Tv, Pill,
+  ShoppingCart, ShoppingBasket, UtensilsCrossed, Fuel, Globe, PlaneTakeoff, Hotel, Tv, Pill,
   Clapperboard, Train, ShoppingBag, Home, Warehouse, Package, Leaf, Car, Tag,
   Apple, Scissors, Zap, Dumbbell, BatteryCharging, CreditCard, type LucideIcon,
 } from 'lucide-react'
 import type { CategoryWithLock } from '../../hooks/useCategories'
 
 const ICON_MAP: Record<string, LucideIcon> = {
-  ShoppingCart, UtensilsCrossed, Fuel,
+  ShoppingCart, ShoppingBasket, UtensilsCrossed, Fuel,
   Plane: Globe, Globe, PlaneTakeoff, Hotel, Tv, Pill,
   Clapperboard, Train, ShoppingBag, Home, Warehouse, Package, Leaf, Car, Tag,
   Apple, Scissors, Zap, Dumbbell, BatteryCharging,

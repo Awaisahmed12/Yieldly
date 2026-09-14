@@ -1,5 +1,5 @@
 import {
-  ShoppingCart, UtensilsCrossed, Fuel, Globe, PlaneTakeoff, Hotel, Tv, Pill,
+  ShoppingCart, ShoppingBasket, UtensilsCrossed, Fuel, Globe, PlaneTakeoff, Hotel, Tv, Pill,
   Clapperboard, Train, ShoppingBag, Home, Warehouse, Package, Leaf, Car, Tag,
   Apple, Scissors, Zap, Dumbbell, BatteryCharging,
   CreditCard, Lock, type LucideIcon,
@@ -9,6 +9,7 @@ import type { CategoryRow } from '../../types/reward'
 const ICON_MAP: Record<string, LucideIcon> = {
   // Standard categories (icon_name from DB)
   ShoppingCart,
+  ShoppingBasket,
   UtensilsCrossed,
   Fuel,
   Plane: Globe,        // Travel = portal = Globe

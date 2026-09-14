@@ -5,6 +5,7 @@
 -- Standard categories
 INSERT INTO categories (slug, display_name, icon_name, is_brand, parent_slug, sort_order) VALUES
   ('groceries',       'Groceries',       'ShoppingCart',       false, NULL, 1),
+  ('online_groceries','Online Groceries','ShoppingBasket',     false, NULL, 19),
   ('dining',          'Dining',          'UtensilsCrossed',    false, NULL, 2),
   ('gas',             'Gas',             'Fuel',               false, NULL, 3),
   ('travel',          'Travel',          'Plane',              false, NULL, 4),

@@ -8,6 +8,7 @@ import type { CardRow } from '../types/reward'
 const SLIDER_CATEGORIES: { slug: string; label: string; defaultAmount: number }[] = [
   { slug: 'dining',          label: 'Dining',          defaultAmount: 0 },
   { slug: 'groceries',       label: 'Groceries',       defaultAmount: 0 },
+  { slug: 'online_groceries',label: 'Online Groceries',defaultAmount: 0 },
   { slug: 'gas',             label: 'Gas',             defaultAmount: 0 },
   { slug: 'travel',          label: 'Travel (portal)', defaultAmount: 0 },
   { slug: 'flights',         label: 'Flights',         defaultAmount: 0 },
