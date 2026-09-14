@@ -58,7 +58,7 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'chase_united_club_infinite', 'United Club Infinite', 'United Club℠ Infinite Card', false, 'UA', 1.10, 1.35, 1.80, 695.00
+SELECT b.id, 'chase_united_club_infinite', 'United Club Infinite', 'United Club℠ Card', false, 'UA', 1.10, 1.35, 1.80, 695.00
 FROM bank_ids b WHERE b.slug = 'chase'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -217,8 +217,8 @@ FROM bank_ids b WHERE b.slug = 'citi'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
-INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'citi_costco', 'Costco Anywhere Visa', 'Costco Anywhere Visa® Card by Citi', false, 'CB', 1.00, 1.00, 1.00, 0.00
+INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee, foreign_transaction_fee)
+SELECT b.id, 'citi_costco', 'Costco Anywhere Visa', 'Costco Anywhere Visa® Card by Citi', false, 'CB', 1.00, 1.00, 1.00, 0.00, 0.00
 FROM bank_ids b WHERE b.slug = 'citi'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -357,8 +357,8 @@ FROM bank_ids b WHERE b.slug = 'usbank'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
-INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'usbank_altitude_go', 'Altitude Go', 'U.S. Bank Altitude® Go Visa Signature® Card', false, 'CB', 1.00, 1.00, 1.00, 0.00
+INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee, foreign_transaction_fee)
+SELECT b.id, 'usbank_altitude_go', 'Altitude Go', 'U.S. Bank Altitude® Go Visa Signature® Card', false, 'CB', 1.00, 1.00, 1.00, 0.00, 3.00
 FROM bank_ids b WHERE b.slug = 'usbank'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -371,8 +371,8 @@ ON CONFLICT (slug) DO NOTHING;
 -- ── ROBINHOOD ──────────────────────────────────────────────────────────────
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
-INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'robinhood_gold_card', 'Gold Card', 'Robinhood Gold Card', false, 'CB', 1.00, 1.00, 1.00, 0.00
+INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee, foreign_transaction_fee)
+SELECT b.id, 'robinhood_gold_card', 'Gold Card', 'Robinhood Gold Card', false, 'CB', 1.00, 1.00, 1.00, 0.00, 3.00
 FROM bank_ids b WHERE b.slug = 'robinhood'
 ON CONFLICT (slug) DO NOTHING;
 
