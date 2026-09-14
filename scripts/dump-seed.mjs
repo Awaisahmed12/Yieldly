@@ -11,6 +11,8 @@ const sql = [
   'supabase/seed/03_cards.sql', 'supabase/seed/04_reward_rates.sql', 'supabase/seed/05_card_unlocks.sql',
   'supabase/migrations/0003_foreign_transaction_fee.sql', 'supabase/migrations/0004_add_missing_cards.sql',
   'supabase/migrations/0007_new_category_rates.sql',
+  'supabase/migrations/0008_canadian_cards.sql', 'supabase/migrations/0009_online_groceries.sql',
+  'supabase/migrations/0010_data_audit_fixes.sql',
 ].map(read).join('\n')
 
 const cards = {}
@@ -22,6 +24,18 @@ for (const m of sql.matchAll(cardRe)) {
 // FTF updates from migration 0003
 for (const m of sql.matchAll(/UPDATE cards SET foreign_transaction_fee = ([\d.]+) WHERE slug IN \(([\s\S]*?)\);/g)) {
   for (const s of m[2].matchAll(/'([a-z0-9_]+)'/g)) if (cards[s[1]]) cards[s[1]].ftf = m[1]
+}
+// Later single-card updates (audit migrations) override the 0003 lists
+for (const m of sql.matchAll(/UPDATE cards SET ([^;]+?) WHERE slug = '([a-z0-9_]+)';/g)) {
+  const c = cards[m[2]]; if (!c) continue
+  for (const kv of m[1].matchAll(/(\w+) = ('(?:[^']|'')*'|[\w.]+)/g)) {
+    const val = kv[2].startsWith("'") ? kv[2].slice(1, -1).replace(/''/g, "'") : kv[2]
+    if (kv[1] === 'foreign_transaction_fee') c.ftf = val
+    else if (kv[1] === 'annual_fee') c.fee = val
+    else if (kv[1] === 'display_name') c.display = val
+    else if (kv[1] === 'full_name') c.full = val
+    else if (kv[1] === 'is_active' && val === 'false') c.inactive = true
+  }
 }
 for (const c of Object.values(cards)) if (c.ftf == null) c.ftf = '0 (default)'
 
@@ -49,7 +63,7 @@ for (const [g, banks] of Object.entries(groups)) {
   total += list.length
   let md = `# ${g} — ${list.length} cards\n\nColumns: bank | slug | display_name | full_name | business | reward_currency | cpp low/default/high | annual_fee | foreign_transaction_fee\n\n`
   for (const c of list) {
-    md += `## ${c.slug}\n${c.bank} | ${c.display} | ${c.full} | business=${c.biz} | ${c.cur} | cpp ${c.cpp} | fee $${c.fee} | FTF ${c.ftf}%\n\n`
+    md += `## ${c.slug}${c.inactive ? ' (INACTIVE)' : ''}\n${c.bank} | ${c.display} | ${c.full} | business=${c.biz} | ${c.cur} | cpp ${c.cpp} | fee $${c.fee} | FTF ${c.ftf}%\n\n`
     md += `| category | rate | type | cap | period | notes |\n|---|---|---|---|---|---|\n`
     for (const r of c.rates) md += `| ${r.cat} | ${r.rate} | ${r.type} | ${r.cap} | ${r.period} | ${r.notes} |\n`
     if (!c.rates.length) md += `| (none — all categories default to 1x/1%) | | | | | |\n`
