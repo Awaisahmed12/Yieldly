@@ -17,9 +17,10 @@ npm run dev        # Start dev server with HMR
 npm run build      # Type-check + build to /dist
 npm run lint       # ESLint (TypeScript strict rules)
 npm run preview    # Preview production build locally
+npm test           # vitest: reward-data regression suite (tests/seed-data.test.ts)
 ```
 
-No test framework is configured. TypeScript strict mode (`noUnusedLocals`, `noUnusedParameters`) acts as a compile-time safety net — `npm run build` will fail on type errors.
+TypeScript strict mode (`noUnusedLocals`, `noUnusedParameters`) acts as a compile-time safety net — `npm run build` will fail on type errors. `tests/seed-data.test.ts` parses the SQL seed + migrations and asserts verified reward facts (rates, caps, fees, unlocks) and that the seed files mirror the migrations; add an assertion whenever a card's terms are corrected. `node scripts/dump-seed.mjs <dir>` writes a per-bank markdown dump of the catalogue for audits; see `docs/data-audit-2026-09.md` for the modeling conventions (portal wording, brand tiles, `online_groceries`).
 
 ## Environment
 
@@ -66,7 +67,7 @@ useCategories()       → categories.ts (visibility logic) → HomePage grid
 
 ### Database
 
-Supabase/PostgreSQL with RLS. Key tables: `banks`, `cards` (57), `categories` (29, hierarchical), `reward_rates` (207), `card_unlocks` (21), `user_cards`, `user_preferences`. All static tables have public read access. Migrations in `supabase/migrations/`, seed data in `supabase/seed/`.
+Supabase/PostgreSQL with RLS. Key tables: `banks` (19), `cards` (95, incl. 2 Canadian), `categories` (37, hierarchical), `reward_rates` (~400), `card_unlocks` (40), `user_cards`, `user_preferences`. All static tables have public read access. Migrations in `supabase/migrations/`, seed data in `supabase/seed/`.
 
 ### Design System
 

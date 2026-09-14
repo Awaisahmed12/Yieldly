@@ -6,7 +6,7 @@
 --   CB      (Cash Back)             : 1.00 / 1.00 / 1.00
 --   UR      (Chase Ultimate Rewards): 1.00 / 1.50 / 2.00
 --   MR      (Amex Membership Rewards): 1.00 / 1.40 / 2.00
---   TYP     (Citi ThankYou Points)  : 1.00 / 1.30 / 1.70
+--   TYP     (Citi ThankYou Points)  : 1.00 / 1.50 / 1.80
 --   C1      (Capital One Miles)     : 1.00 / 1.50 / 1.85
 --   SW      (Southwest Rapid Rewards): 1.30 / 1.50 / 1.80
 --   UA      (United MileagePlus)    : 1.10 / 1.35 / 1.80
@@ -27,8 +27,8 @@ FROM bank_ids b WHERE b.slug = 'chase'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
-INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'chase_freedom_flex', 'Freedom Flex', 'Chase Freedom Flex℠', false, 'CB', 1.00, 1.00, 1.00, 0.00
+INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee, foreign_transaction_fee)
+SELECT b.id, 'chase_freedom_flex', 'Freedom Flex', 'Chase Freedom Flex℠', false, 'CB', 1.00, 1.00, 1.00, 0.00, 0.00
 FROM bank_ids b WHERE b.slug = 'chase'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -40,25 +40,25 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'chase_sapphire_reserve', 'Sapphire Reserve', 'Chase Sapphire Reserve®', false, 'UR', 1.00, 1.50, 2.00, 550.00
+SELECT b.id, 'chase_sapphire_reserve', 'Sapphire Reserve', 'Chase Sapphire Reserve®', false, 'UR', 1.00, 1.50, 2.00, 795.00
 FROM bank_ids b WHERE b.slug = 'chase'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'chase_amazon_prime_visa', 'Amazon Prime Visa', 'Amazon Prime Rewards Visa Signature', false, 'CB', 1.00, 1.00, 1.00, 0.00
+SELECT b.id, 'chase_amazon_prime_visa', 'Amazon Prime Visa', 'Prime Visa', false, 'CB', 1.00, 1.00, 1.00, 0.00
 FROM bank_ids b WHERE b.slug = 'chase'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'chase_united_explorer', 'United Explorer', 'United℠ Explorer Card', false, 'UA', 1.10, 1.35, 1.80, 95.00
+SELECT b.id, 'chase_united_explorer', 'United Explorer', 'United℠ Explorer Card', false, 'UA', 1.10, 1.35, 1.80, 150.00
 FROM bank_ids b WHERE b.slug = 'chase'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'chase_united_club_infinite', 'United Club Infinite', 'United Club℠ Infinite Card', false, 'UA', 1.10, 1.35, 1.80, 525.00
+SELECT b.id, 'chase_united_club_infinite', 'United Club Infinite', 'United Club℠ Infinite Card', false, 'UA', 1.10, 1.35, 1.80, 695.00
 FROM bank_ids b WHERE b.slug = 'chase'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -70,19 +70,19 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'chase_southwest_plus', 'Southwest Plus', 'Southwest Rapid Rewards® Plus Credit Card', false, 'SW', 1.30, 1.50, 1.80, 69.00
+SELECT b.id, 'chase_southwest_plus', 'Southwest Plus', 'Southwest Rapid Rewards® Plus Credit Card', false, 'SW', 1.30, 1.50, 1.80, 99.00
 FROM bank_ids b WHERE b.slug = 'chase'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'chase_southwest_premier', 'Southwest Premier', 'Southwest Rapid Rewards® Premier Credit Card', false, 'SW', 1.30, 1.50, 1.80, 99.00
+SELECT b.id, 'chase_southwest_premier', 'Southwest Premier', 'Southwest Rapid Rewards® Premier Credit Card', false, 'SW', 1.30, 1.50, 1.80, 149.00
 FROM bank_ids b WHERE b.slug = 'chase'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'chase_southwest_priority', 'Southwest Priority', 'Southwest Rapid Rewards® Priority Credit Card', false, 'SW', 1.30, 1.50, 1.80, 149.00
+SELECT b.id, 'chase_southwest_priority', 'Southwest Priority', 'Southwest Rapid Rewards® Priority Credit Card', false, 'SW', 1.30, 1.50, 1.80, 229.00
 FROM bank_ids b WHERE b.slug = 'chase'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -120,19 +120,19 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'amex_gold', 'Gold Card', 'American Express® Gold Card', false, 'MR', 1.00, 1.40, 2.00, 250.00
+SELECT b.id, 'amex_gold', 'Gold Card', 'American Express® Gold Card', false, 'MR', 1.00, 1.40, 2.00, 325.00
 FROM bank_ids b WHERE b.slug = 'amex'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'amex_platinum', 'Platinum Card', 'The Platinum Card®', false, 'MR', 1.00, 1.40, 2.00, 695.00
+SELECT b.id, 'amex_platinum', 'Platinum Card', 'The Platinum Card®', false, 'MR', 1.00, 1.40, 2.00, 895.00
 FROM bank_ids b WHERE b.slug = 'amex'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'amex_green', 'Green Card', 'American Express® Green Card', false, 'MR', 1.00, 1.40, 2.00, 150.00
+SELECT b.id, 'amex_green', 'Green Card', 'American Express® Classic Green Card', false, 'MR', 1.00, 1.40, 2.00, 150.00
 FROM bank_ids b WHERE b.slug = 'amex'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -192,7 +192,7 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'amex_business_platinum', 'Business Platinum', 'The Business Platinum Card®', true, 'MR', 1.00, 1.40, 2.00, 695.00
+SELECT b.id, 'amex_business_platinum', 'Business Platinum', 'The Business Platinum Card®', true, 'MR', 1.00, 1.40, 2.00, 895.00
 FROM bank_ids b WHERE b.slug = 'amex'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -212,7 +212,7 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'citi_strata_premier', 'Strata Premier', 'Citi Strata Premier℠ Card', false, 'TYP', 1.00, 1.30, 1.70, 95.00
+SELECT b.id, 'citi_strata_premier', 'Strata Premier', 'Citi Strata Premier℠ Card', false, 'TYP', 1.00, 1.50, 1.80, 95.00
 FROM bank_ids b WHERE b.slug = 'citi'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -244,13 +244,13 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'capital_one_savorone', 'SavorOne', 'Capital One SavorOne Cash Rewards Credit Card', false, 'CB', 1.00, 1.00, 1.00, 0.00
+SELECT b.id, 'capital_one_savorone', 'Savor', 'Capital One Savor Cash Rewards Credit Card', false, 'CB', 1.00, 1.00, 1.00, 0.00
 FROM bank_ids b WHERE b.slug = 'capital_one'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'capital_one_savor', 'Savor', 'Capital One Savor Cash Rewards Credit Card', false, 'CB', 1.00, 1.00, 1.00, 95.00
+SELECT b.id, 'capital_one_savor', 'Savor (legacy $95)', 'Capital One Savor Cash Rewards Credit Card (legacy, closed to new applicants)', false, 'CB', 1.00, 1.00, 1.00, 95.00
 FROM bank_ids b WHERE b.slug = 'capital_one'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -344,7 +344,7 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'bofa_alaska_airlines', 'Alaska Airlines Visa', 'Alaska Airlines Visa® Signature Card', false, 'Alaska', 1.00, 1.40, 1.80, 75.00
+SELECT b.id, 'bofa_alaska_airlines', 'Atmos Rewards Ascent Visa', 'Atmos™ Rewards Ascent Visa Signature® Credit Card (formerly Alaska Airlines Visa)', false, 'Alaska', 1.00, 1.40, 1.80, 95.00
 FROM bank_ids b WHERE b.slug = 'bofa'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -352,7 +352,7 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'usbank_altitude_reserve', 'Altitude Reserve', 'U.S. Bank Altitude® Reserve Visa Infinite® Card', false, 'Points', 1.50, 1.50, 1.50, 400.00
+SELECT b.id, 'usbank_altitude_reserve', 'Altitude Reserve', 'U.S. Bank Altitude® Reserve Visa Infinite® Card', false, 'Points', 1.00, 1.00, 1.00, 400.00
 FROM bank_ids b WHERE b.slug = 'usbank'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -417,8 +417,8 @@ FROM bank_ids b WHERE b.slug = 'barclays'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
-INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'barclays_wyndham_rewards_earner_plus', 'Wyndham Rewards Earner Plus', 'Wyndham Rewards Earner® Plus Card', false, 'Wyndham', 0.40, 0.60, 0.90, 75.00
+INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee, foreign_transaction_fee)
+SELECT b.id, 'barclays_wyndham_rewards_earner_plus', 'Wyndham Rewards Earner Plus', 'Wyndham Rewards Earner® Plus Card', false, 'Wyndham', 0.60, 0.70, 1.00, 95.00, 0.00
 FROM bank_ids b WHERE b.slug = 'barclays'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -432,7 +432,7 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'chase_united_quest', 'United Quest', 'United℠ Quest Card', false, 'UA', 1.10, 1.35, 1.80, 250.00
+SELECT b.id, 'chase_united_quest', 'United Quest', 'United℠ Quest Card', false, 'UA', 1.10, 1.35, 1.80, 350.00
 FROM bank_ids b WHERE b.slug = 'chase'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -444,7 +444,7 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'chase_united_business', 'United Business', 'United℠ Business Card', true, 'UA', 1.10, 1.35, 1.80, 99.00
+SELECT b.id, 'chase_united_business', 'United Business', 'United℠ Business Card', true, 'UA', 1.10, 1.35, 1.80, 150.00
 FROM bank_ids b WHERE b.slug = 'chase'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -468,7 +468,7 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'chase_aeroplan', 'Aeroplan', 'Aeroplan® Credit Card', false, 'Aeroplan', 1.20, 1.50, 2.00, 95.00
+SELECT b.id, 'chase_aeroplan', 'Air Canada Aeroplan', 'Chase Air Canada Aeroplan® Credit Card', false, 'Aeroplan', 1.20, 1.50, 2.00, 195.00
 FROM bank_ids b WHERE b.slug = 'chase'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -487,14 +487,14 @@ FROM bank_ids b WHERE b.slug = 'amex'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
-INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'amex_everyday_preferred', 'EveryDay Preferred', 'Amex EveryDay® Preferred Credit Card', false, 'MR', 1.00, 1.40, 2.00, 95.00
+INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee, foreign_transaction_fee)
+SELECT b.id, 'amex_everyday_preferred', 'EveryDay Preferred', 'Amex EveryDay® Preferred Credit Card', false, 'MR', 1.00, 1.40, 2.00, 95.00, 2.70
 FROM bank_ids b WHERE b.slug = 'amex'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'amex_cash_magnet', 'Cash Magnet', 'Blue Cash Magnet® Card', false, 'CB', 1.00, 1.00, 1.00, 0.00
+SELECT b.id, 'amex_cash_magnet', 'Cash Magnet', 'Cash Magnet® Card', false, 'CB', 1.00, 1.00, 1.00, 0.00
 FROM bank_ids b WHERE b.slug = 'amex'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -505,8 +505,8 @@ FROM bank_ids b WHERE b.slug = 'amex'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
-INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'amex_blue_business_plus', 'Blue Business Plus', 'The Blue Business® Plus Credit Card', true, 'MR', 1.00, 1.40, 2.00, 0.00
+INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee, foreign_transaction_fee)
+SELECT b.id, 'amex_blue_business_plus', 'Blue Business Plus', 'The Blue Business® Plus Credit Card', true, 'MR', 1.00, 1.40, 2.00, 0.00, 2.70
 FROM bank_ids b WHERE b.slug = 'amex'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -518,7 +518,7 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'amex_hilton_honors_business', 'Hilton Honors Business', 'Hilton Honors American Express Business Card', true, 'HH', 0.40, 0.55, 0.70, 95.00
+SELECT b.id, 'amex_hilton_honors_business', 'Hilton Honors Business', 'Hilton Honors American Express Business Card', true, 'HH', 0.40, 0.55, 0.70, 195.00
 FROM bank_ids b WHERE b.slug = 'amex'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -544,7 +544,7 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'citi_aadvantage_executive', 'AAdvantage Executive', 'Citi® / AAdvantage® Executive World Elite Mastercard®', false, 'AA', 1.10, 1.40, 1.80, 595.00
+SELECT b.id, 'citi_aadvantage_executive', 'AAdvantage Executive', 'Citi® / AAdvantage® Executive World Legend™ Mastercard®', false, 'AA', 1.10, 1.40, 1.80, 695.00
 FROM bank_ids b WHERE b.slug = 'citi'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -564,13 +564,13 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'capital_one_spark_miles', 'Spark Miles', 'Capital One Spark Miles for Business', true, 'C1', 1.00, 1.50, 1.85, 95.00
+SELECT b.id, 'capital_one_spark_miles', 'Venture Business', 'Capital One Venture Business (formerly Spark Miles)', true, 'C1', 1.00, 1.50, 1.85, 95.00
 FROM bank_ids b WHERE b.slug = 'capital_one'
 ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'capital_one_spark_miles_select', 'Spark Miles Select', 'Capital One Spark Miles Select for Business', true, 'C1', 1.00, 1.50, 1.85, 0.00
+SELECT b.id, 'capital_one_spark_miles_select', 'VentureOne Business', 'Capital One VentureOne Business (formerly Spark Miles Select)', true, 'C1', 1.00, 1.50, 1.85, 0.00
 FROM bank_ids b WHERE b.slug = 'capital_one'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -586,7 +586,7 @@ ON CONFLICT (slug) DO NOTHING;
 
 WITH bank_ids AS (SELECT slug, id FROM banks)
 INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee)
-SELECT b.id, 'bofa_alaska_airlines_business', 'Alaska Airlines Business Visa', 'Alaska Airlines Visa® Business Card', true, 'Alaska', 1.00, 1.40, 1.80, 75.00
+SELECT b.id, 'bofa_alaska_airlines_business', 'Atmos Rewards Visa Business', 'Atmos™ Rewards Visa Signature® Business Card (formerly Alaska Airlines Business Visa)', true, 'Alaska', 1.00, 1.40, 1.80, 70.00
 FROM bank_ids b WHERE b.slug = 'bofa'
 ON CONFLICT (slug) DO NOTHING;
 
@@ -630,3 +630,19 @@ SELECT b.id, 'td_aeroplan_visa_infinite', 'Aeroplan Visa Infinite', 'TD® Aeropl
   false, 'Aeroplan', 1.20, 1.50, 2.00, 139.00, 2.50
 FROM bank_ids b WHERE b.slug = 'td'
 ON CONFLICT (slug) DO NOTHING;
+
+-- ── AUDIT ADDITIONS (September 2026) ────────────────────────────────────────
+
+WITH bank_ids AS (SELECT slug, id FROM banks)
+INSERT INTO cards (bank_id, slug, display_name, full_name, is_business, reward_currency, cpp_low, cpp_default, cpp_high, annual_fee, foreign_transaction_fee)
+SELECT b.id, 'bilt_blue', 'Bilt Blue', 'Bilt Blue Card', false, 'Bilt', 1.25, 1.50, 2.20, 0.00, 0.00
+FROM bank_ids b WHERE b.slug = 'bilt'
+ON CONFLICT (slug) DO NOTHING;
+
+-- Discontinued products (kept for history; hidden from the app)
+-- Wells Fargo Bilt Mastercard retired Feb 6 2026; replaced by the Cardless-issued Bilt Card 2.0 line-up
+UPDATE cards SET is_active = false WHERE slug = 'bilt_mastercard';
+-- Closed Oct 2025; accounts converted to Citi / AAdvantage Platinum Select on Apr 24 2026
+UPDATE cards SET is_active = false WHERE slug = 'barclays_aadvantage_aviator_red';
+-- Program ended Mar 24 2026; accounts converted to Synchrony Premier World Mastercard (flat 2%)
+UPDATE cards SET is_active = false WHERE slug = 'ebay_mastercard';

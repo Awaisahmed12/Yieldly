@@ -1,7 +1,7 @@
 export const CPP: Record<string, { low: number; default: number; high: number }> = {
   UR:     { low: 1.00, default: 1.50, high: 2.00 },  // Chase Ultimate Rewards
   MR:     { low: 1.00, default: 1.40, high: 2.00 },  // Amex Membership Rewards
-  TYP:    { low: 1.00, default: 1.30, high: 1.70 },  // Citi ThankYou Points
+  TYP:    { low: 1.00, default: 1.50, high: 1.80 },  // Citi ThankYou Points
   C1:     { low: 1.00, default: 1.50, high: 1.85 },  // Capital One Miles
   CB:     { low: 1.00, default: 1.00, high: 1.00 },  // Cash Back (always 1:1)
   SW:     { low: 1.30, default: 1.50, high: 1.80 },  // Southwest Rapid Rewards
@@ -14,9 +14,10 @@ export const CPP: Record<string, { low: number; default: number; high: number }>
   Points: { low: 1.50, default: 1.50, high: 1.50 },  // US Bank fixed-value points
   AA:     { low: 1.10, default: 1.40, high: 1.80 },  // American Airlines AAdvantage
   TB:     { low: 1.00, default: 1.30, high: 1.60 },  // JetBlue TrueBlue
-  Wyndham:  { low: 0.40, default: 0.60, high: 0.90 },  // Wyndham Rewards
+  Wyndham:  { low: 0.60, default: 0.70, high: 1.00 },  // Wyndham Rewards
   IHG:      { low: 0.40, default: 0.50, high: 0.70 },  // IHG One Rewards
   Avios:    { low: 1.00, default: 1.40, high: 2.00 },  // British Airways Avios
   Bilt:     { low: 1.25, default: 1.50, high: 2.00 },  // Bilt Rewards
   Aeroplan: { low: 1.20, default: 1.50, high: 2.00 },  // Air Canada Aeroplan
+  // Canadian Amex Membership Rewards is worth more than US MR; amex_cobalt overrides per card (1.00 / 1.50 / 2.20)
 }

@@ -66,8 +66,24 @@ export function loadSeed(files: string[] = SEED_FILES, extraFiles: string[] = []
   for (const m of sql.matchAll(/UPDATE cards SET foreign_transaction_fee = ([\d.]+) WHERE slug IN \(([\s\S]*?)\);/g)) {
     for (const s of m[2].matchAll(/'([a-z0-9_]+)'/g)) if (cards[s[1]]) cards[s[1]].ftf = Number(m[1])
   }
-  for (const m of sql.matchAll(/UPDATE cards SET annual_fee = ([\d.]+) WHERE slug = '([a-z0-9_]+)'/g)) {
-    if (cards[m[2]]) cards[m[2]].annualFee = Number(m[1])
+  // Generic single-card updates: UPDATE cards SET a = x, b = 'y' WHERE slug = 'slug';
+  const inactive: string[] = []
+  for (const m of sql.matchAll(/UPDATE cards SET ([^;]+?) WHERE slug = '([a-z0-9_]+)';/g)) {
+    const card = cards[m[2]]
+    if (!card) continue
+    for (const kv of m[1].matchAll(/(\w+) = ('(?:[^']|'')*'|[\w.]+)/g)) {
+      const [, field, raw] = kv
+      const val = raw.startsWith("'") ? unq(raw.slice(1, -1)) : raw
+      if (field === 'annual_fee') card.annualFee = Number(val)
+      else if (field === 'foreign_transaction_fee') card.ftf = Number(val)
+      else if (field === 'display_name') card.displayName = val
+      else if (field === 'full_name') card.fullName = val
+      else if (field === 'reward_currency') card.currency = val
+      else if (field === 'cpp_low') card.cpp[0] = Number(val)
+      else if (field === 'cpp_default') card.cpp[1] = Number(val)
+      else if (field === 'cpp_high') card.cpp[2] = Number(val)
+      else if (field === 'is_active' && val === 'false') inactive.push(m[2])
+    }
   }
 
   // Later statements override earlier ones for the same (card, category), the
@@ -95,10 +111,7 @@ export function loadSeed(files: string[] = SEED_FILES, extraFiles: string[] = []
   )
   const unlocks = [...unlockKeys].map(k => { const [cardSlug, category] = k.split(':'); return { cardSlug, category } })
 
-  const inactive = [...sql.matchAll(/UPDATE cards SET is_active = false WHERE slug IN \(([\s\S]*?)\)/g)]
-    .flatMap(m => [...m[1].matchAll(/'([a-z0-9_]+)'/g)].map(s => s[1]))
-
-  return { cards, rates, unlocks, categories, banks, inactive }
+  return { cards, rates, unlocks, categories, banks, inactive: [...new Set(inactive)] }
 }
 
 export function rateOf(data: SeedData, cardSlug: string, category: string): SeedRate | undefined {

@@ -1,4 +1,4 @@
-import { CreditCard, Infinity, Zap, AlertTriangle } from 'lucide-react'
+import { CreditCard, Infinity as InfinityIcon, Zap, AlertTriangle } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import type { TieInfo } from '../../types/reward'
 
@@ -8,7 +8,7 @@ interface TiebreakerNoteProps {
 
 const FACTOR_ICONS: Record<string, LucideIcon> = {
   annual_fee: CreditCard,
-  no_cap: Infinity,
+  no_cap: InfinityIcon,
   cashback_simplicity: Zap,
   portal_restriction: AlertTriangle,
 }
