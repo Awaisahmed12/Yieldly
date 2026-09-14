@@ -5,14 +5,13 @@ import { useCategories } from '../hooks/useCategories'
 import { useRewardData } from '../hooks/useRewardData'
 import { useRewardLookup } from '../hooks/useRewardLookup'
 import { useUserStore } from '../store/userStore'
-import { getSubpromptOptions } from '../lib/categories'
+import { getSubpromptOptions, orderByUsage } from '../lib/categories'
 import { searchCategorySlugs } from '../lib/categorySearch'
 import { TopNav } from '../components/shared/TopNav'
 import { CategoryGrid } from '../components/home/CategoryGrid'
 import { SubpromptSheet } from '../components/home/SubpromptSheet'
 import { InstallBanner } from '../components/shared/InstallBanner'
-import { useRecentCategories } from '../hooks/useRecentCategories'
-import { RecentCategoriesRow } from '../components/home/RecentCategoriesRow'
+import { useCategoryUsage } from '../hooks/useCategoryUsage'
 import { ResultCard } from '../components/result/ResultCard'
 import { RankedList } from '../components/result/RankedList'
 import { TiebreakerNote } from '../components/result/TiebreakerNote'
@@ -29,7 +28,7 @@ export function HomePage() {
   const { categories, loading } = useCategories()
   const { unlocks, categories: allCategories, banks } = useRewardData()
   const { userCardIds } = useUserStore()
-  const { recentSlugs, addRecent } = useRecentCategories()
+  const { usage, recordTap } = useCategoryUsage()
   const [searchQuery, setSearchQuery] = useState('')
   const [subprompt, setSubprompt] = useState<SubpromptState | null>(null)
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
@@ -50,7 +49,7 @@ export function HomePage() {
         })
         return matched
       })()
-    : visibleCategories
+    : orderByUsage(visibleCategories, usage)
 
   const { ranked, winner, tie, loading: resultLoading } = useRewardLookup(selectedSlug)
   const categoryName = allCategories.find(c => c.slug === selectedSlug)?.display_name ?? ''
@@ -58,7 +57,7 @@ export function HomePage() {
 
 
   const openResult = useCallback((slug: string) => {
-    addRecent(slug)
+    recordTap(slug)
     setResultVisible(false)
     setSelectedSlug(slug)
     requestAnimationFrame(() => {
@@ -70,7 +69,7 @@ export function HomePage() {
         }
       }, 50)
     })
-  }, [addRecent])
+  }, [recordTap])
 
   function handleCategoryTap(slug: string) {
     if (slug === selectedSlug) {
@@ -128,16 +127,6 @@ export function HomePage() {
           )}
         </div>
       </div>
-
-      {/* Recently used */}
-      {!searchQuery && (
-        <RecentCategoriesRow
-          slugs={recentSlugs}
-          categories={visibleCategories}
-          selectedSlug={selectedSlug}
-          onSelect={handleCategoryTap}
-        />
-      )}
 
       {/* Category grid */}
       <CategoryGrid
